@@ -57,8 +57,8 @@ CREATE TABLE Book (
 	book_id int IDENTITY(1,1) PRIMARY KEY,
 	author nchar(50) NOT NULL,
 	name nchar(50) NOT NULL,
-	genre nchar(20) NOT NULL CHECK (genre IN (N'Роман',N'Научная фантастика',N'Драма',N'Детектив',
-											N'Мистика', N'Поэзия',N'Сказка', N'Фантастика', N'Пьеса')),
+	genre nchar(20) NOT NULL CHECK (genre IN (N'Р РѕРјР°РЅ',N'РќР°СѓС‡РЅР°СЏ С„Р°РЅС‚Р°СЃС‚РёРєР°',N'Р”СЂР°РјР°',N'Р”РµС‚РµРєС‚РёРІ',
+											N'РњРёСЃС‚РёРєР°', N'РџРѕСЌР·РёСЏ',N'РЎРєР°Р·РєР°', N'Р¤Р°РЅС‚Р°СЃС‚РёРєР°', N'РџСЊРµСЃР°')),
 	publish_year numeric(4) NOT NULL,
 	cost_of smallmoney NULL CHECK (cost_of > 0),
 	library_id int NULL,
@@ -71,37 +71,37 @@ SET IDENTITY_INSERT Library ON;
 go
 
 INSERT INTO Library(library_id,name)
-VALUES (1,N'Российская государственная библиотека'),
-	   (2,N'Библиотека им. Ленина'),
-	   (3,N'Библиотека иностранной литературы'),
-	   (4,N'Библиотека-читальня им. Тургенева')
+VALUES (1,N'Р РѕСЃСЃРёР№СЃРєР°СЏ РіРѕСЃСѓРґР°СЂСЃС‚РІРµРЅРЅР°СЏ Р±РёР±Р»РёРѕС‚РµРєР°'),
+	   (2,N'Р‘РёР±Р»РёРѕС‚РµРєР° РёРј. Р›РµРЅРёРЅР°'),
+	   (3,N'Р‘РёР±Р»РёРѕС‚РµРєР° РёРЅРѕСЃС‚СЂР°РЅРЅРѕР№ Р»РёС‚РµСЂР°С‚СѓСЂС‹'),
+	   (4,N'Р‘РёР±Р»РёРѕС‚РµРєР°-С‡РёС‚Р°Р»СЊРЅСЏ РёРј. РўСѓСЂРіРµРЅРµРІР°')
 go
 
 INSERT INTO Library(library_id,name)
-VALUES (0,N'Склад')
+VALUES (0,N'РЎРєР»Р°Рґ')
 
 INSERT INTO Book(author,name,genre,publish_year,library_id)
-VALUES (N'Александр Пушкин',N'Евгений Онегин', N'Роман', 1831,1),
-	   (N'Жюль Верн',N'20 000 льё под водой',N'Научная фантастика', 1916,2),
-	   (N'Агата Кристи',N'Убийство Роджера Экройда',N'Детектив',1926,3),
-	   (N'Стивен Кинг',N'1408', N'Мистика', 1926,3),
-	   (N'Корней Чуковской',N'Добрый доктор', N'Сказка', 1936,4),
-	   (N'Гастон Леру',N'Призрак оперы', N'Роман', 1910,3)
+VALUES (N'РђР»РµРєСЃР°РЅРґСЂ РџСѓС€РєРёРЅ',N'Р•РІРіРµРЅРёР№ РћРЅРµРіРёРЅ', N'Р РѕРјР°РЅ', 1831,1),
+	   (N'Р–СЋР»СЊ Р’РµСЂРЅ',N'20 000 Р»СЊС‘ РїРѕРґ РІРѕРґРѕР№',N'РќР°СѓС‡РЅР°СЏ С„Р°РЅС‚Р°СЃС‚РёРєР°', 1916,2),
+	   (N'РђРіР°С‚Р° РљСЂРёСЃС‚Рё',N'РЈР±РёР№СЃС‚РІРѕ Р РѕРґР¶РµСЂР° Р­РєСЂРѕР№РґР°',N'Р”РµС‚РµРєС‚РёРІ',1926,3),
+	   (N'РЎС‚РёРІРµРЅ РљРёРЅРі',N'1408', N'РњРёСЃС‚РёРєР°', 1926,3),
+	   (N'РљРѕСЂРЅРµР№ Р§СѓРєРѕРІСЃРєРѕР№',N'Р”РѕР±СЂС‹Р№ РґРѕРєС‚РѕСЂ', N'РЎРєР°Р·РєР°', 1936,4),
+	   (N'Р“Р°СЃС‚РѕРЅ Р›РµСЂСѓ',N'РџСЂРёР·СЂР°Рє РѕРїРµСЂС‹', N'Р РѕРјР°РЅ', 1910,3)
 go
 
 /* SELECT * FROM Library
 SELECT * FROM Book
 go */
 
--- Для одной из таблиц пункта 2 задания 7 создать триггеры на вставку, удаление и добавление,
--- при выполнении заданных условий один из триггеров должен инициировать возникновение ошибки
+-- Р”Р»СЏ РѕРґРЅРѕР№ РёР· С‚Р°Р±Р»РёС† РїСѓРЅРєС‚Р° 2 Р·Р°РґР°РЅРёСЏ 7 СЃРѕР·РґР°С‚СЊ С‚СЂРёРіРіРµСЂС‹ РЅР° РІСЃС‚Р°РІРєСѓ, СѓРґР°Р»РµРЅРёРµ Рё РґРѕР±Р°РІР»РµРЅРёРµ,
+-- РїСЂРё РІС‹РїРѕР»РЅРµРЅРёРё Р·Р°РґР°РЅРЅС‹С… СѓСЃР»РѕРІРёР№ РѕРґРёРЅ РёР· С‚СЂРёРіРіРµСЂРѕРІ РґРѕР»Р¶РµРЅ РёРЅРёС†РёРёСЂРѕРІР°С‚СЊ РІРѕР·РЅРёРєРЅРѕРІРµРЅРёРµ РѕС€РёР±РєРё
 -- (RAISERROR / THROW)
 
--- Триггеры на удаление
+-- РўСЂРёРіРіРµСЂС‹ РЅР° СѓРґР°Р»РµРЅРёРµ
 use lab9;
 go
 
--- Триггер на удаление --
+-- РўСЂРёРіРіРµСЂ РЅР° СѓРґР°Р»РµРЅРёРµ --
 
 IF OBJECT_ID(N'Delete_library',N'TR') IS NOT NULL
 	DROP TRIGGER Delete_library
@@ -114,7 +114,7 @@ AS
 	BEGIN
 		IF EXISTS (SELECT TOP 1 library_id FROM deleted WHERE library_id = 0)
 			BEGIN;
-				EXEC sp_addmessage 50001, 15,N'Удаление склада невозможно!',@lang = 'us_english', @replace='REPLACE';
+				EXEC sp_addmessage 50001, 15,N'РЈРґР°Р»РµРЅРёРµ СЃРєР»Р°РґР° РЅРµРІРѕР·РјРѕР¶РЅРѕ!',@lang = 'us_english', @replace='REPLACE';
 				RAISERROR(50001,15,-1)
 			END;
 		ELSE
@@ -124,9 +124,9 @@ AS
 				-- DELETE l FROM Library AS l INNER JOIN deleted AS d ON l.library_id = d.library_id
 				DELETE FROM Library WHERE library_id IN (SELECT library_id FROM deleted)
 				IF (SELECT DISTINCT COUNT(*) FROM deleted) > 1
-					PRINT 'Библиотеки удалены из таблицы и все книги, хранящиеся в этих библиотеках, перемещены в склад!'
+					PRINT 'Р‘РёР±Р»РёРѕС‚РµРєРё СѓРґР°Р»РµРЅС‹ РёР· С‚Р°Р±Р»РёС†С‹ Рё РІСЃРµ РєРЅРёРіРё, С…СЂР°РЅСЏС‰РёРµСЃСЏ РІ СЌС‚РёС… Р±РёР±Р»РёРѕС‚РµРєР°С…, РїРµСЂРµРјРµС‰РµРЅС‹ РІ СЃРєР»Р°Рґ!'
 				ELSE
-					PRINT 'Библиотека удалена из таблицы и все книги, хранящиеся в этой библиотеке, перемещены в склад!'
+					PRINT 'Р‘РёР±Р»РёРѕС‚РµРєР° СѓРґР°Р»РµРЅР° РёР· С‚Р°Р±Р»РёС†С‹ Рё РІСЃРµ РєРЅРёРіРё, С…СЂР°РЅСЏС‰РёРµСЃСЏ РІ СЌС‚РѕР№ Р±РёР±Р»РёРѕС‚РµРєРµ, РїРµСЂРµРјРµС‰РµРЅС‹ РІ СЃРєР»Р°Рґ!'
 			END;
 	END
 go
@@ -137,7 +137,7 @@ SELECT * FROM Library
 go */
 
 
--- Триггер на обновление --
+-- РўСЂРёРіРіРµСЂ РЅР° РѕР±РЅРѕРІР»РµРЅРёРµ --
 
 IF OBJECT_ID(N'Update_info_library',N'TR') IS NOT NULL
 	DROP TRIGGER Update_info_library
@@ -151,7 +151,7 @@ AS
 		IF ((UPDATE(street) AND EXISTS (SELECT TOP 1 street FROM deleted WHERE street is not NULL)) 
 		    OR (UPDATE(house) AND EXISTS (SELECT TOP 1 house FROM deleted WHERE house is not NULL)))
 			BEGIN;
-				EXEC sp_addmessage 50002, 15,N'Изменение местоположения библиотеки невозможно! Используйте возможность в 2 шага: удаления данной библиотеки и создания ей записи таблице',@lang='us_english',@replace='REPLACE';
+				EXEC sp_addmessage 50002, 15,N'РР·РјРµРЅРµРЅРёРµ РјРµСЃС‚РѕРїРѕР»РѕР¶РµРЅРёСЏ Р±РёР±Р»РёРѕС‚РµРєРё РЅРµРІРѕР·РјРѕР¶РЅРѕ! РСЃРїРѕР»СЊР·СѓР№С‚Рµ РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РІ 2 С€Р°РіР°: СѓРґР°Р»РµРЅРёСЏ РґР°РЅРЅРѕР№ Р±РёР±Р»РёРѕС‚РµРєРё Рё СЃРѕР·РґР°РЅРёСЏ РµР№ Р·Р°РїРёСЃРё С‚Р°Р±Р»РёС†Рµ',@lang='us_english',@replace='REPLACE';
 				RAISERROR(50002,15,-1)
 			END;
 		ELSE
@@ -170,26 +170,26 @@ AS
 				INNER JOIN deleted B ON A.library_id = B.library_id
 
 				IF UPDATE(street)
-					PRINT N'Добавлено местоположение (улица)'
+					PRINT N'Р”РѕР±Р°РІР»РµРЅРѕ РјРµСЃС‚РѕРїРѕР»РѕР¶РµРЅРёРµ (СѓР»РёС†Р°)'
 				IF UPDATE(house)
-					PRINT N'Добавлено местоположение (дом)'
+					PRINT N'Р”РѕР±Р°РІР»РµРЅРѕ РјРµСЃС‚РѕРїРѕР»РѕР¶РµРЅРёРµ (РґРѕРј)'
 				IF UPDATE(name)
-					PRINT N'Была переназвана библиотека(и)'
+					PRINT N'Р‘С‹Р»Р° РїРµСЂРµРЅР°Р·РІР°РЅР° Р±РёР±Р»РёРѕС‚РµРєР°(Рё)'
 				IF UPDATE(phone_number) AND EXISTS (SELECT TOP 1 delete_phone_number FROM @temp_table WHERE delete_phone_number IS NULL)
-					PRINT N'Был добавлен телефон'
+					PRINT N'Р‘С‹Р» РґРѕР±Р°РІР»РµРЅ С‚РµР»РµС„РѕРЅ'
 				IF UPDATE(phone_number) 
-					PRINT N'Был изменен телефон'
+					PRINT N'Р‘С‹Р» РёР·РјРµРЅРµРЅ С‚РµР»РµС„РѕРЅ'
 				IF UPDATE(website) AND EXISTS (SELECT TOP 1 delete_website FROM @temp_table WHERE delete_website IS NULL)
-					PRINT N'Был добавлен сайт'
+					PRINT N'Р‘С‹Р» РґРѕР±Р°РІР»РµРЅ СЃР°Р№С‚'
 				IF UPDATE(website)
-					PRINT N'Был изменен сайт'
+					PRINT N'Р‘С‹Р» РёР·РјРµРЅРµРЅ СЃР°Р№С‚'
 
 				DECLARE @number int;
 				SET @number = (SELECT DISTINCT COUNT(*) FROM @temp_table);
 				IF @number > 1
-					PRINT N'у ' + CAST(@number AS VARCHAR(1)) + ' библиотек'
+					PRINT N'Сѓ ' + CAST(@number AS VARCHAR(1)) + ' Р±РёР±Р»РёРѕС‚РµРє'
 				ELSE
-					PRINT N'у 1 библиотеки'
+					PRINT N'Сѓ 1 Р±РёР±Р»РёРѕС‚РµРєРё'
 		END;
 	END
 go 
@@ -202,7 +202,7 @@ go */
 SELECT * FROM Library
 go */
 
--- Триггер на вставку --
+-- РўСЂРёРіРіРµСЂ РЅР° РІСЃС‚Р°РІРєСѓ --
 		
 IF OBJECT_ID(N'Add_library',N'TR') IS NOT NULL
 	DROP TRIGGER Add_library
@@ -214,22 +214,22 @@ CREATE TRIGGER Add_library
 AS
 	BEGIN
 		IF (SELECT DISTINCT COUNT(*) FROM inserted) > 1
-			PRINT 'Добавлены новые библиотеки в таблицу'
+			PRINT 'Р”РѕР±Р°РІР»РµРЅС‹ РЅРѕРІС‹Рµ Р±РёР±Р»РёРѕС‚РµРєРё РІ С‚Р°Р±Р»РёС†Сѓ'
 		ELSE
-			PRINT 'Добавлена новая библиотека в таблицу'
+			PRINT 'Р”РѕР±Р°РІР»РµРЅР° РЅРѕРІР°СЏ Р±РёР±Р»РёРѕС‚РµРєР° РІ С‚Р°Р±Р»РёС†Сѓ'
 	END
 go
 
 /* INSERT INTO Library(library_id,name)
-VALUES (5,N'Библиотека имени Эйзентштейна'),
-	   (6,N'Библиотека № 122 им. Александра Грина')
+VALUES (5,N'Р‘РёР±Р»РёРѕС‚РµРєР° РёРјРµРЅРё Р­Р№Р·РµРЅС‚С€С‚РµР№РЅР°'),
+	   (6,N'Р‘РёР±Р»РёРѕС‚РµРєР° в„– 122 РёРј. РђР»РµРєСЃР°РЅРґСЂР° Р“СЂРёРЅР°')
 SELECT * FROM Library
 go */
 
--- Для представления пункта 2 задания 7 создать триггеры на вставку, удаление и добавление,
--- обеспечивающие возможность выполнения операций с данными непосредственно через представление
+-- Р”Р»СЏ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РїСѓРЅРєС‚Р° 2 Р·Р°РґР°РЅРёСЏ 7 СЃРѕР·РґР°С‚СЊ С‚СЂРёРіРіРµСЂС‹ РЅР° РІСЃС‚Р°РІРєСѓ, СѓРґР°Р»РµРЅРёРµ Рё РґРѕР±Р°РІР»РµРЅРёРµ,
+-- РѕР±РµСЃРїРµС‡РёРІР°СЋС‰РёРµ РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РІС‹РїРѕР»РЅРµРЅРёСЏ РѕРїРµСЂР°С†РёР№ СЃ РґР°РЅРЅС‹РјРё РЅРµРїРѕСЃСЂРµРґСЃС‚РІРµРЅРЅРѕ С‡РµСЂРµР· РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ
 
--- Представление (View)
+-- РџСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ (View)
 
 SET IDENTITY_INSERT Library OFF;  
 go
@@ -281,14 +281,14 @@ AS
 		SELECT add_author,add_name,add_genre,add_publish_year,add_library_id
 		FROM @temp_table
 
-		PRINT 'Добавлены новые книги'
+		PRINT 'Р”РѕР±Р°РІР»РµРЅС‹ РЅРѕРІС‹Рµ РєРЅРёРіРё'
 	END
 go
 
 /* INSERT INTO JoinLibraryView(name,author,genre,publish_year,library_name)
-VALUES (N'451 градус по Фаренгейту',N'Рэй Брэдбери',N'Роман',1953,N'Библиотека иностранной литературы'),
-	   (N'Мастер и Маргарита',N'Михаил Булгаков',N'Мистика',1966,N'Библиотека-читальня им. А.С.Пушкина'),
-	   (N'Маленький принц',N'Антуан де Сент-Экзюпери',N'Сказка',1943,N'Российская государственная детская библиотека')
+VALUES (N'451 РіСЂР°РґСѓСЃ РїРѕ Р¤Р°СЂРµРЅРіРµР№С‚Сѓ',N'Р СЌР№ Р‘СЂСЌРґР±РµСЂРё',N'Р РѕРјР°РЅ',1953,N'Р‘РёР±Р»РёРѕС‚РµРєР° РёРЅРѕСЃС‚СЂР°РЅРЅРѕР№ Р»РёС‚РµСЂР°С‚СѓСЂС‹'),
+	   (N'РњР°СЃС‚РµСЂ Рё РњР°СЂРіР°СЂРёС‚Р°',N'РњРёС…Р°РёР» Р‘СѓР»РіР°РєРѕРІ',N'РњРёСЃС‚РёРєР°',1966,N'Р‘РёР±Р»РёРѕС‚РµРєР°-С‡РёС‚Р°Р»СЊРЅСЏ РёРј. Рђ.РЎ.РџСѓС€РєРёРЅР°'),
+	   (N'РњР°Р»РµРЅСЊРєРёР№ РїСЂРёРЅС†',N'РђРЅС‚СѓР°РЅ РґРµ РЎРµРЅС‚-Р­РєР·СЋРїРµСЂРё',N'РЎРєР°Р·РєР°',1943,N'Р РѕСЃСЃРёР№СЃРєР°СЏ РіРѕСЃСѓРґР°СЂСЃС‚РІРµРЅРЅР°СЏ РґРµС‚СЃРєР°СЏ Р±РёР±Р»РёРѕС‚РµРєР°')
 SELECT * FROM Library
 SELECT * FROM Book
 go */
@@ -304,11 +304,11 @@ CREATE TRIGGER Delete_View_library
 AS
 	BEGIN
 		DELETE FROM Book WHERE name IN (SELECT name FROM deleted)
-		PRINT 'Удалены книги'
+		PRINT 'РЈРґР°Р»РµРЅС‹ РєРЅРёРіРё'
 	END
 go
 
-DELETE FROM JoinLibraryView WHERE (name=N'1408' AND author=N'Стивен Кинг') OR (name=N'Евгений Онегин' AND publish_year=1831)
+DELETE FROM JoinLibraryView WHERE (name=N'1408' AND author=N'РЎС‚РёРІРµРЅ РљРёРЅРі') OR (name=N'Р•РІРіРµРЅРёР№ РћРЅРµРіРёРЅ' AND publish_year=1831)
 SELECT * FROM Library
 SELECT * FROM Book
 SELECT * FROM JoinLibraryView
@@ -331,7 +331,7 @@ AS
 
 		IF UPDATE(name) OR UPDATE(author) OR UPDATE(publish_year) OR UPDATE(genre)
 			BEGIN
-				EXEC sp_addmessage 50004, 15,N'Запрещено изменение данных о книге в следствие нарушения целостности! По причине этого, воспользуйтесь созданием новой книги или же удалением существующей',@lang='us_english',@replace='REPLACE';
+				EXEC sp_addmessage 50004, 15,N'Р—Р°РїСЂРµС‰РµРЅРѕ РёР·РјРµРЅРµРЅРёРµ РґР°РЅРЅС‹С… Рѕ РєРЅРёРіРµ РІ СЃР»РµРґСЃС‚РІРёРµ РЅР°СЂСѓС€РµРЅРёСЏ С†РµР»РѕСЃС‚РЅРѕСЃС‚Рё! РџРѕ РїСЂРёС‡РёРЅРµ СЌС‚РѕРіРѕ, РІРѕСЃРїРѕР»СЊР·СѓР№С‚РµСЃСЊ СЃРѕР·РґР°РЅРёРµРј РЅРѕРІРѕР№ РєРЅРёРіРё РёР»Рё Р¶Рµ СѓРґР°Р»РµРЅРёРµРј СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµР№',@lang='us_english',@replace='REPLACE';
 				RAISERROR(50004,15,-1)
 			END
 
@@ -350,20 +350,20 @@ AS
 
 		IF EXISTS (SELECT * FROM @temp_table WHERE add_library_id IS NULL)
 			BEGIN
-				EXEC sp_addmessage 50003, 15,N'Перемещение книги в несуществующую библиотеку невозможно!',@lang='us_english',@replace='REPLACE';
+				EXEC sp_addmessage 50003, 15,N'РџРµСЂРµРјРµС‰РµРЅРёРµ РєРЅРёРіРё РІ РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰СѓСЋ Р±РёР±Р»РёРѕС‚РµРєСѓ РЅРµРІРѕР·РјРѕР¶РЅРѕ!',@lang='us_english',@replace='REPLACE';
 				RAISERROR(50003,15,-1)
 			END
 
 		IF UPDATE(library_name)
 			BEGIN
 				UPDATE Book SET library_id = (SELECT TOP 1 add_library_id FROM @temp_table) WHERE name IN (SELECT delete_name FROM @temp_table)
-				PRINT N'Книга(и) была(и) перемещена(ы) в другую библиотеку'
+				PRINT N'РљРЅРёРіР°(Рё) Р±С‹Р»Р°(Рё) РїРµСЂРµРјРµС‰РµРЅР°(С‹) РІ РґСЂСѓРіСѓСЋ Р±РёР±Р»РёРѕС‚РµРєСѓ'
 			END
 
 	END
 go
 
-/* UPDATE JoinLibraryView SET library_name=N'Библиотека-читальня им. Тургенева' WHERE (name=N'1408' AND author=N'Стивен Кинг') OR (name=N'Евгений Онегин' AND publish_year=1831)
+/* UPDATE JoinLibraryView SET library_name=N'Р‘РёР±Р»РёРѕС‚РµРєР°-С‡РёС‚Р°Р»СЊРЅСЏ РёРј. РўСѓСЂРіРµРЅРµРІР°' WHERE (name=N'1408' AND author=N'РЎС‚РёРІРµРЅ РљРёРЅРі') OR (name=N'Р•РІРіРµРЅРёР№ РћРЅРµРіРёРЅ' AND publish_year=1831)
 SELECT * FROM Library
 SELECT * FROM Book
 go */
