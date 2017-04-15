@@ -35,20 +35,20 @@ CREATE TABLE Patient (
 	patient_id int PRIMARY KEY NOT NULL,
 	number_patient_card int NULL,
 	name nchar(50) NOT NULL,
-	gender nchar(1) CHECK (gender IN (N'М',N'Ж')),
+	gender nchar(1) CHECK (gender IN (N'Рњ',N'Р–')),
 	date_of_birth date NULL
 	CONSTRAINT Uniq_patient UNIQUE (number_patient_card)
 	);
 go
 
 INSERT INTO Patient(patient_id,number_patient_card,name,gender,date_of_birth)
-VALUES (1,747708263,N'Полина Буриличева',N'Ж',CONVERT(date,N'03-11-1961')),
-	   (2,435768605,N'Анна Дубина',N'Ж',CONVERT(date,N'26-03-1965')),
-	   (3,116016179,N'Станислав Каширин',N'М',CONVERT(date,N'02-08-1967')),
-	   (4,364875697,N'Виктория Киприянова',N'Ж',CONVERT(date,N'03-09-1967')),
-	   (5,900748436,N'Вероника Конака',N'Ж',CONVERT(date,N'08-07-1984')),
-	   (6,432040156,N'Кирилл Машуков',N'М',CONVERT(date,N'19-02-1988')),
-	   (7,363922627,N'Вячеслав Перешивкин',N'М',CONVERT(date,N'12-12-1995'))
+VALUES (1,747708263,N'РџРѕР»РёРЅР° Р‘СѓСЂРёР»РёС‡РµРІР°',N'Р–',CONVERT(date,N'03-11-1961')),
+	   (2,435768605,N'РђРЅРЅР° Р”СѓР±РёРЅР°',N'Р–',CONVERT(date,N'26-03-1965')),
+	   (3,116016179,N'РЎС‚Р°РЅРёСЃР»Р°РІ РљР°С€РёСЂРёРЅ',N'Рњ',CONVERT(date,N'02-08-1967')),
+	   (4,364875697,N'Р’РёРєС‚РѕСЂРёСЏ РљРёРїСЂРёСЏРЅРѕРІР°',N'Р–',CONVERT(date,N'03-09-1967')),
+	   (5,900748436,N'Р’РµСЂРѕРЅРёРєР° РљРѕРЅР°РєР°',N'Р–',CONVERT(date,N'08-07-1984')),
+	   (6,432040156,N'РљРёСЂРёР»Р» РњР°С€СѓРєРѕРІ',N'Рњ',CONVERT(date,N'19-02-1988')),
+	   (7,363922627,N'Р’СЏС‡РµСЃР»Р°РІ РџРµСЂРµС€РёРІРєРёРЅ',N'Рњ',CONVERT(date,N'12-12-1995'))
 go
 
 if OBJECT_ID(N'FK_Patient',N'F') IS NOT NULL
@@ -64,7 +64,7 @@ CREATE TABLE Visit (
 	visit_date date NOT NULL,
 	visit_time time(0) NULL,
 	patient_id int NOT NULL,
-	visit_reason nchar(100) DEFAULT (N'Неизвестна причина болезни'),
+	visit_reason nchar(100) DEFAULT (N'РќРµРёР·РІРµСЃС‚РЅР° РїСЂРёС‡РёРЅР° Р±РѕР»РµР·РЅРё'),
 	CONSTRAINT FK_Patient FOREIGN KEY (patient_id) REFERENCES Patient (patient_id) ON UPDATE CASCADE ON DELETE CASCADE
 	);
 go
