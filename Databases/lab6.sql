@@ -27,8 +27,8 @@ if OBJECT_ID(N'Author',N'U') is NOT NULL
 go
 
 
--- Создать таблицу с автоинкрементным первичным ключом.
--- Добавить поля, для которых используются ограничения (CHECK), значения по умолчанию (DEFAULT).
+-- РЎРѕР·РґР°С‚СЊ С‚Р°Р±Р»РёС†Сѓ СЃ Р°РІС‚РѕРёРЅРєСЂРµРјРµРЅС‚РЅС‹Рј РїРµСЂРІРёС‡РЅС‹Рј РєР»СЋС‡РѕРј.
+-- Р”РѕР±Р°РІРёС‚СЊ РїРѕР»СЏ, РґР»СЏ РєРѕС‚РѕСЂС‹С… РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ РѕРіСЂР°РЅРёС‡РµРЅРёСЏ (CHECK), Р·РЅР°С‡РµРЅРёСЏ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ (DEFAULT).
 
 CREATE TABLE Author (
 	author_id int IDENTITY(1,1) PRIMARY KEY,
@@ -42,16 +42,16 @@ CREATE TABLE Author (
 go
 
 INSERT INTO Author(name,surname,date_of_birth,date_of_death)
-VALUES (N'Стивен',N'Кинг', 1947, NULL),
-	   (N'Джордан',N'Белфорт',1962, NULL),
-	   (N'Джоджо',N'Мойес',1969,NULL),
-	   (N'Артур',N'Конан Дойл', 1859, 1930),
-	   (N'Чарльз',N'Диккенс', 1812, 1870),
-	   (N'Оскар',N'Уайльд', 1854, 1900),
-	   (N'Антуан',N'де Сент-Экзюпери', 1900, 1944)
-	   --  Возникнет ошибка --
-	   -- ,(N'Рэй',N'Брэдбери', 1920, 2012)--
-	   -- ,(N'Неизвестный',N'автор', 1989, 1986) --
+VALUES (N'РЎС‚РёРІРµРЅ',N'РљРёРЅРі', 1947, NULL),
+	   (N'Р”Р¶РѕСЂРґР°РЅ',N'Р‘РµР»С„РѕСЂС‚',1962, NULL),
+	   (N'Р”Р¶РѕРґР¶Рѕ',N'РњРѕР№РµСЃ',1969,NULL),
+	   (N'РђСЂС‚СѓСЂ',N'РљРѕРЅР°РЅ Р”РѕР№Р»', 1859, 1930),
+	   (N'Р§Р°СЂР»СЊР·',N'Р”РёРєРєРµРЅСЃ', 1812, 1870),
+	   (N'РћСЃРєР°СЂ',N'РЈР°Р№Р»СЊРґ', 1854, 1900),
+	   (N'РђРЅС‚СѓР°РЅ',N'РґРµ РЎРµРЅС‚-Р­РєР·СЋРїРµСЂРё', 1900, 1944)
+	   --  Р’РѕР·РЅРёРєРЅРµС‚ РѕС€РёР±РєР° --
+	   -- ,(N'Р СЌР№',N'Р‘СЂСЌРґР±РµСЂРё', 1920, 2012)--
+	   -- ,(N'РќРµРёР·РІРµСЃС‚РЅС‹Р№',N'Р°РІС‚РѕСЂ', 1989, 1986) --
 go
 
 SELECT * FROM Author
@@ -62,7 +62,7 @@ waitfor delay '00:00:15'
 print ('q1: ' + cast(IDENT_CURRENT('dbo.Author') as nvarchar(3)))
 print ('q1(scope): ' + cast(SCOPE_IDENTITY() as nvarchar(3)))
 
--- Возможно использование SCOPE_IDENTITY() --
+-- Р’РѕР·РјРѕР¶РЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ SCOPE_IDENTITY() --
 SELECT IDENT_CURRENT('dbo.Author') as last_id
 go 
 
@@ -71,13 +71,13 @@ WHERE date_of_birth < 1900
 go
 
 INSERT INTO Author(name,surname,date_of_birth,date_of_death)
-VALUES (N'Фрэнсис',N'Скотт', 1896, 1940)
+VALUES (N'Р¤СЂСЌРЅСЃРёСЃ',N'РЎРєРѕС‚С‚', 1896, 1940)
 
 SELECT * FROM Author
 go */
 
 
--- Создать таблицу с первичным ключом на основе глобального уникального идентификатора
+-- РЎРѕР·РґР°С‚СЊ С‚Р°Р±Р»РёС†Сѓ СЃ РїРµСЂРІРёС‡РЅС‹Рј РєР»СЋС‡РѕРј РЅР° РѕСЃРЅРѕРІРµ РіР»РѕР±Р°Р»СЊРЅРѕРіРѕ СѓРЅРёРєР°Р»СЊРЅРѕРіРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР°
 
 if OBJECT_ID(N'Book',N'U') is NOT NULL
 	DROP TABLE Book;
@@ -87,8 +87,8 @@ CREATE TABLE Book (
 	book_id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT (NEWID()),
 	author nchar(50) NOT NULL,
 	name nchar(50) NOT NULL,
-	genre nchar(20) NOT NULL CHECK (genre IN (N'Роман',N'Научная фантастика',N'Драма',N'Детектив',
-											N'Мистика', N'Поэзия',N'Сказка', N'Фантастика', N'Пьеса')),
+	genre nchar(20) NOT NULL CHECK (genre IN (N'Р РѕРјР°РЅ',N'РќР°СѓС‡РЅР°СЏ С„Р°РЅС‚Р°СЃС‚РёРєР°',N'Р”СЂР°РјР°',N'Р”РµС‚РµРєС‚РёРІ',
+											N'РњРёСЃС‚РёРєР°', N'РџРѕСЌР·РёСЏ',N'РЎРєР°Р·РєР°', N'Р¤Р°РЅС‚Р°СЃС‚РёРєР°', N'РџСЊРµСЃР°')),
 	publish_year numeric(4) NOT NULL CHECK (publish_year>1500 AND publish_year<2000),
 	publish_house varchar(100) NULL DEFAULT ('Unknown'),
 	cost_of smallmoney NULL CHECK (cost_of > 0),
@@ -96,25 +96,25 @@ CREATE TABLE Book (
 go
 
 INSERT INTO Book(author,name,genre,publish_year)
--- Для получения вставляемого уникального идентификатора -- 
+-- Р”Р»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РІСЃС‚Р°РІР»СЏРµРјРѕРіРѕ СѓРЅРёРєР°Р»СЊРЅРѕРіРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР° -- 
 -- OUTPUT inserted.book_id -- 
-VALUES (N'Александр Пушкин',N'Евгений Онегин', N'Роман', 1831),
-	   (N'Жюль Верн',N'20 000 льё под водой',N'Научная фантастика', 1916),
-	   (N'Агата Кристи',N'Убийство Роджера Экройда',N'Детектив',1926),
-	   (N'Стивен Кинг',N'1408', N'Мистика', 1926),
-	   (N'Корней Чуковской',N'1408', N'Сказка', 1936),
-	   (N'Гастон Леру',N'Призрак оперы', N'Роман', 1910)
+VALUES (N'РђР»РµРєСЃР°РЅРґСЂ РџСѓС€РєРёРЅ',N'Р•РІРіРµРЅРёР№ РћРЅРµРіРёРЅ', N'Р РѕРјР°РЅ', 1831),
+	   (N'Р–СЋР»СЊ Р’РµСЂРЅ',N'20 000 Р»СЊС‘ РїРѕРґ РІРѕРґРѕР№',N'РќР°СѓС‡РЅР°СЏ С„Р°РЅС‚Р°СЃС‚РёРєР°', 1916),
+	   (N'РђРіР°С‚Р° РљСЂРёСЃС‚Рё',N'РЈР±РёР№СЃС‚РІРѕ Р РѕРґР¶РµСЂР° Р­РєСЂРѕР№РґР°',N'Р”РµС‚РµРєС‚РёРІ',1926),
+	   (N'РЎС‚РёРІРµРЅ РљРёРЅРі',N'1408', N'РњРёСЃС‚РёРєР°', 1926),
+	   (N'РљРѕСЂРЅРµР№ Р§СѓРєРѕРІСЃРєРѕР№',N'1408', N'РЎРєР°Р·РєР°', 1936),
+	   (N'Р“Р°СЃС‚РѕРЅ Р›РµСЂСѓ',N'РџСЂРёР·СЂР°Рє РѕРїРµСЂС‹', N'Р РѕРјР°РЅ', 1910)
 go
 INSERT INTO Book(book_id,author,name,genre,publish_year)
--- Для получения вставляемого уникального идентификатора -- 
+-- Р”Р»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РІСЃС‚Р°РІР»СЏРµРјРѕРіРѕ СѓРЅРёРєР°Р»СЊРЅРѕРіРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР° -- 
 -- OUTPUT inserted.book_id -- 
-VALUES ('294B4012-1617-482A-8058-F73039852768',N'Александр Пушкин',N'Евгений Онегин', N'Роман', 1831)
+VALUES ('294B4012-1617-482A-8058-F73039852768',N'РђР»РµРєСЃР°РЅРґСЂ РџСѓС€РєРёРЅ',N'Р•РІРіРµРЅРёР№ РћРЅРµРіРёРЅ', N'Р РѕРјР°РЅ', 1831)
 
 SELECT * FROM Book
 go
 
 
--- Создать таблицу с первичным ключом на основе последовательности
+-- РЎРѕР·РґР°С‚СЊ С‚Р°Р±Р»РёС†Сѓ СЃ РїРµСЂРІРёС‡РЅС‹Рј РєР»СЋС‡РѕРј РЅР° РѕСЃРЅРѕРІРµ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё
 IF EXISTS (SELECT * FROM sys.sequences WHERE NAME = N'TestSequence' AND TYPE='SO')
 DROP SEQUENCE TestSequence
 go
@@ -131,24 +131,24 @@ go
 
 CREATE TABLE ArrayList (
 	element_id int PRIMARY KEY NOT NULL,
-	element nchar(50) DEFAULT (N'Элемент'),
+	element nchar(50) DEFAULT (N'Р­Р»РµРјРµРЅС‚'),
 	);
 go
 
 INSERT INTO ArrayList(element_id,element)
-VALUES (NEXT VALUE FOR DBO.TestSequence,N'Россия'),
-	   (NEXT VALUE FOR DBO.TestSequence,N'Греция'),
-	   (NEXT VALUE FOR DBO.TestSequence,N'Испания'),
-	   (NEXT VALUE FOR DBO.TestSequence,N'Италия'),
-	   (NEXT VALUE FOR DBO.TestSequence,N'Канада')
+VALUES (NEXT VALUE FOR DBO.TestSequence,N'Р РѕСЃСЃРёСЏ'),
+	   (NEXT VALUE FOR DBO.TestSequence,N'Р“СЂРµС†РёСЏ'),
+	   (NEXT VALUE FOR DBO.TestSequence,N'РСЃРїР°РЅРёСЏ'),
+	   (NEXT VALUE FOR DBO.TestSequence,N'РС‚Р°Р»РёСЏ'),
+	   (NEXT VALUE FOR DBO.TestSequence,N'РљР°РЅР°РґР°')
 go
 
 SELECT * From ArrayList
 go
 
 
--- Создать две связанные таблицы, и протестировать на них различные варианты действий --
--- для ограничений ссылочной целостности (NO ACTION| CASCADE | SET NULL | SET DEFAULT). --
+-- РЎРѕР·РґР°С‚СЊ РґРІРµ СЃРІСЏР·Р°РЅРЅС‹Рµ С‚Р°Р±Р»РёС†С‹, Рё РїСЂРѕС‚РµСЃС‚РёСЂРѕРІР°С‚СЊ РЅР° РЅРёС… СЂР°Р·Р»РёС‡РЅС‹Рµ РІР°СЂРёР°РЅС‚С‹ РґРµР№СЃС‚РІРёР№ --
+-- РґР»СЏ РѕРіСЂР°РЅРёС‡РµРЅРёР№ СЃСЃС‹Р»РѕС‡РЅРѕР№ С†РµР»РѕСЃС‚РЅРѕСЃС‚Рё (NO ACTION| CASCADE | SET NULL | SET DEFAULT). --
 if OBJECT_ID(N'FK_Patient',N'F') IS NOT NULL
 	ALTER TABLE Visit DROP CONSTRAINT FK_Patient
 go
@@ -161,19 +161,19 @@ CREATE TABLE Patient (
 	patient_id int PRIMARY KEY NOT NULL,
 	number_patient_card int NULL,
 	name nchar(50) NOT NULL,
-	gender nchar(1) CHECK (gender IN (N'М',N'Ж')),
+	gender nchar(1) CHECK (gender IN (N'Рњ',N'Р–')),
 	date_of_birth datetime NULL
 	);
 go
 
 INSERT INTO Patient(patient_id,name,gender)
-VALUES (1,N'Полина Буриличева',N'Ж'),
-	   (2,N'Анна Дубина',N'Ж'),
-	   (3,N'Станислав Каширин',N'М'),
-	   (4,N'Виктория Киприянова',N'Ж'),
-	   (5,N'Вероника Конака',N'Ж'),
-	   (6,N'Кирилл Машуков',N'М'),
-	   (7,N'Вячеслав Перешивкин',N'М')
+VALUES (1,N'РџРѕР»РёРЅР° Р‘СѓСЂРёР»РёС‡РµРІР°',N'Р–'),
+	   (2,N'РђРЅРЅР° Р”СѓР±РёРЅР°',N'Р–'),
+	   (3,N'РЎС‚Р°РЅРёСЃР»Р°РІ РљР°С€РёСЂРёРЅ',N'Рњ'),
+	   (4,N'Р’РёРєС‚РѕСЂРёСЏ РљРёРїСЂРёСЏРЅРѕРІР°',N'Р–'),
+	   (5,N'Р’РµСЂРѕРЅРёРєР° РљРѕРЅР°РєР°',N'Р–'),
+	   (6,N'РљРёСЂРёР»Р» РњР°С€СѓРєРѕРІ',N'Рњ'),
+	   (7,N'Р’СЏС‡РµСЃР»Р°РІ РџРµСЂРµС€РёРІРєРёРЅ',N'Рњ')
 go
 
 SELECT * FROM Patient
@@ -188,7 +188,7 @@ CREATE TABLE Visit (
 	visit_date date DEFAULT (CONVERT(date,GETDATE())),
 	visit_time time(0) DEFAULT (CONVERT(time,GETDATE())),
 	visit_patient int NULL,
-	visit_reason nchar(100) DEFAULT (N'Неизвестна причина болезни'),
+	visit_reason nchar(100) DEFAULT (N'РќРµРёР·РІРµСЃС‚РЅР° РїСЂРёС‡РёРЅР° Р±РѕР»РµР·РЅРё'),
 	CONSTRAINT FK_Patient FOREIGN KEY (visit_patient) REFERENCES Patient (patient_id)
 	-- ON UPDATE CASCADE --
 	-- ON UPDATE SET NULL --
@@ -212,7 +212,7 @@ go
 
 
 /* DELETE FROM Patient
-WHERE gender = N'М'
+WHERE gender = N'Рњ'
 go 
 
 SELECT * FROM Patient
