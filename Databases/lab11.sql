@@ -122,7 +122,7 @@ CREATE TABLE Exhibit (
 	article_code numeric(13) NOT NULL, 
 	creation_year numeric(4) NULL,
 	cost_of money NULL,
-	type_exhibit nchar(70) NOT NULL CHECK (type_exhibit IN (N'Скульптура',N'Живопись',N'Иконопись',N'Графика',N'Драгоценности',N'Одежда',N'Иное')),
+	type_exhibit nchar(70) NOT NULL CHECK (type_exhibit IN (N'РЎРєСѓР»СЊРїС‚СѓСЂР°',N'Р–РёРІРѕРїРёСЃСЊ',N'РРєРѕРЅРѕРїРёСЃСЊ',N'Р“СЂР°С„РёРєР°',N'Р”СЂР°РіРѕС†РµРЅРЅРѕСЃС‚Рё',N'РћРґРµР¶РґР°',N'РРЅРѕРµ')),
 	author_id int NOT NULL DEFAULT(0),
 	museum_id int NULL,
 	CONSTRAINT FK_Exhibit_Author FOREIGN KEY (author_id) REFERENCES Author (author_id) ON DELETE SET DEFAULT ON UPDATE CASCADE,
@@ -256,7 +256,7 @@ AS
 
 		IF (UPDATE(street) OR (UPDATE(house) OR (UPDATE(city))))
 			BEGIN;
-				EXEC sp_addmessage 50001, 15,N'Изменение местоположения музея невозможно! Используйте возможность в 2 шага: удаления данного музея и создания ей новой записи таблице',@lang='us_english',@replace='REPLACE';
+				EXEC sp_addmessage 50001, 15,N'РР·РјРµРЅРµРЅРёРµ РјРµСЃС‚РѕРїРѕР»РѕР¶РµРЅРёСЏ РјСѓР·РµСЏ РЅРµРІРѕР·РјРѕР¶РЅРѕ! РСЃРїРѕР»СЊР·СѓР№С‚Рµ РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РІ 2 С€Р°РіР°: СѓРґР°Р»РµРЅРёСЏ РґР°РЅРЅРѕРіРѕ РјСѓР·РµСЏ Рё СЃРѕР·РґР°РЅРёСЏ РµР№ РЅРѕРІРѕР№ Р·Р°РїРёСЃРё С‚Р°Р±Р»РёС†Рµ',@lang='us_english',@replace='REPLACE';
 				RAISERROR(50001,15,-1)
 			END;
 		ELSE
@@ -275,20 +275,20 @@ AS
 				INNER JOIN deleted B ON A.museum_id = B.museum_id
 
 				IF UPDATE(name)
-					PRINT N'Была переназван музей(и)'
+					PRINT N'Р‘С‹Р»Р° РїРµСЂРµРЅР°Р·РІР°РЅ РјСѓР·РµР№(Рё)'
 				IF UPDATE(phone_number) 
-					PRINT N'Был изменен телефон'
+					PRINT N'Р‘С‹Р» РёР·РјРµРЅРµРЅ С‚РµР»РµС„РѕРЅ'
 				IF UPDATE(website) AND EXISTS (SELECT TOP 1 delete_website FROM @temp_table WHERE delete_website IS NULL)
-					PRINT N'Был добавлен сайт'
+					PRINT N'Р‘С‹Р» РґРѕР±Р°РІР»РµРЅ СЃР°Р№С‚'
 				IF UPDATE(website)
-					PRINT N'Был изменен сайт'
+					PRINT N'Р‘С‹Р» РёР·РјРµРЅРµРЅ СЃР°Р№С‚'
 
 				DECLARE @number int;
 				SET @number = (SELECT DISTINCT COUNT(*) FROM @temp_table);
 				IF @number > 1
-					PRINT N'у ' + CAST(@number AS VARCHAR(1)) + ' музеев'
+					PRINT N'Сѓ ' + CAST(@number AS VARCHAR(1)) + ' РјСѓР·РµРµРІ'
 				ELSE
-					PRINT N'у 1 музея'
+					PRINT N'Сѓ 1 РјСѓР·РµСЏ'
 		END;
 	END
 go
@@ -308,7 +308,7 @@ AS
 			OR (UPDATE(creation_year) AND EXISTS (SELECT TOP 1 creation_year FROM deleted WHERE creation_year is not NULL))
 			OR UPDATE(author_id) OR UPDATE(type_exhibit))
 			BEGIN;
-				EXEC sp_addmessage 50002, 15,N'Запрещено изменение данных о экспонате в следствие нарушения целостности! По причине этого, воспользуйтесь созданием нового экспоната или же удалением экспоната',@lang='us_english',@replace='REPLACE';
+				EXEC sp_addmessage 50002, 15,N'Р—Р°РїСЂРµС‰РµРЅРѕ РёР·РјРµРЅРµРЅРёРµ РґР°РЅРЅС‹С… Рѕ СЌРєСЃРїРѕРЅР°С‚Рµ РІ СЃР»РµРґСЃС‚РІРёРµ РЅР°СЂСѓС€РµРЅРёСЏ С†РµР»РѕСЃС‚РЅРѕСЃС‚Рё! РџРѕ РїСЂРёС‡РёРЅРµ СЌС‚РѕРіРѕ, РІРѕСЃРїРѕР»СЊР·СѓР№С‚РµСЃСЊ СЃРѕР·РґР°РЅРёРµРј РЅРѕРІРѕРіРѕ СЌРєСЃРїРѕРЅР°С‚Р° РёР»Рё Р¶Рµ СѓРґР°Р»РµРЅРёРµРј СЌРєСЃРїРѕРЅР°С‚Р°',@lang='us_english',@replace='REPLACE';
 				RAISERROR(50002,15,-1)
 			END;
 		ELSE
@@ -327,25 +327,25 @@ AS
 				INNER JOIN deleted B ON A.exhibit_id = B.exhibit_id
 
 				IF UPDATE(creation_year) AND EXISTS (SELECT TOP 1 delete_creation_year FROM @temp_table WHERE delete_creation_year IS NULL)
-					PRINT N'Был добавлен год создания экспоната'
+					PRINT N'Р‘С‹Р» РґРѕР±Р°РІР»РµРЅ РіРѕРґ СЃРѕР·РґР°РЅРёСЏ СЌРєСЃРїРѕРЅР°С‚Р°'
 				IF UPDATE(cost_of)
-					PRINT N'Была добавлена стоимость экспоната'
+					PRINT N'Р‘С‹Р»Р° РґРѕР±Р°РІР»РµРЅР° СЃС‚РѕРёРјРѕСЃС‚СЊ СЌРєСЃРїРѕРЅР°С‚Р°'
 				IF UPDATE(cost_of) AND EXISTS (SELECT TOP 1 cost_of FROM deleted WHERE cost_of is not NULL)
-					PRINT N'Была изменена стоимость экспоната'
+					PRINT N'Р‘С‹Р»Р° РёР·РјРµРЅРµРЅР° СЃС‚РѕРёРјРѕСЃС‚СЊ СЌРєСЃРїРѕРЅР°С‚Р°'
 				IF UPDATE(museum_id) AND EXISTS (SELECT TOP 1 museum_id FROM deleted WHERE museum_id is NULL)
-					PRINT N'Экспонат был перемещен со склада в музей'
+					PRINT N'Р­РєСЃРїРѕРЅР°С‚ Р±С‹Р» РїРµСЂРµРјРµС‰РµРЅ СЃРѕ СЃРєР»Р°РґР° РІ РјСѓР·РµР№'
 				IF UPDATE(museum_id) AND EXISTS (SELECT TOP 1 add_museum_id FROM @temp_table WHERE add_museum_id IS NULL)
 									 AND EXISTS (SELECT TOP 1 delete_museum_id FROM @temp_table WHERE delete_museum_id IS NOT NULL)
-					PRINT N'Экспонат был перемещен с музея на склад'
+					PRINT N'Р­РєСЃРїРѕРЅР°С‚ Р±С‹Р» РїРµСЂРµРјРµС‰РµРЅ СЃ РјСѓР·РµСЏ РЅР° СЃРєР»Р°Рґ'
 				IF UPDATE(museum_id) AND EXISTS (SELECT TOP 1 delete_museum_id FROM @temp_table WHERE delete_museum_id IS NOT NULL)
-					PRINT N'Экспонат был перемещен с одного музея в другой музей'
+					PRINT N'Р­РєСЃРїРѕРЅР°С‚ Р±С‹Р» РїРµСЂРµРјРµС‰РµРЅ СЃ РѕРґРЅРѕРіРѕ РјСѓР·РµСЏ РІ РґСЂСѓРіРѕР№ РјСѓР·РµР№'
 
 				DECLARE @number int;
 				SET @number = (SELECT DISTINCT COUNT(*) FROM @temp_table);
 				IF @number > 1
-					PRINT N'у ' + CAST(@number AS VARCHAR(1)) + ' экспонатов'
+					PRINT N'Сѓ ' + CAST(@number AS VARCHAR(1)) + ' СЌРєСЃРїРѕРЅР°С‚РѕРІ'
 				ELSE
-					PRINT N'у 1 экспоната'
+					PRINT N'Сѓ 1 СЌРєСЃРїРѕРЅР°С‚Р°'
 		END;
 	END
 go
@@ -361,9 +361,9 @@ AS
 	BEGIN
 		UPDATE Exhibit SET museum_id = NULL WHERE exhibit_id IN (SELECT exhibit_id FROM deleted)
 		IF (SELECT DISTINCT COUNT(*) FROM deleted) > 1
-			PRINT 'Экспонаты перемещены на склад'
+			PRINT 'Р­РєСЃРїРѕРЅР°С‚С‹ РїРµСЂРµРјРµС‰РµРЅС‹ РЅР° СЃРєР»Р°Рґ'
 		ELSE
-			PRINT 'Экспонат перемещен на склад'
+			PRINT 'Р­РєСЃРїРѕРЅР°С‚ РїРµСЂРµРјРµС‰РµРЅ РЅР° СЃРєР»Р°Рґ'
 	END
 go
 
@@ -381,7 +381,7 @@ AS
 			OR (UPDATE(date_of_birth) AND EXISTS (SELECT TOP 1 date_of_birth FROM deleted WHERE date_of_birth is not NULL))
 			OR (UPDATE(date_of_death) AND EXISTS (SELECT TOP 1 date_of_death FROM deleted WHERE date_of_death is not NULL)))
 			BEGIN;
-				EXEC sp_addmessage 50003, 15,N'Запрещено изменение данных об авторе экспоната в следствие нарушения целостности! По причине этого, воспользуйтесь созданием новой автора или же удалением существующего',@lang='us_english',@replace='REPLACE';
+				EXEC sp_addmessage 50003, 15,N'Р—Р°РїСЂРµС‰РµРЅРѕ РёР·РјРµРЅРµРЅРёРµ РґР°РЅРЅС‹С… РѕР± Р°РІС‚РѕСЂРµ СЌРєСЃРїРѕРЅР°С‚Р° РІ СЃР»РµРґСЃС‚РІРёРµ РЅР°СЂСѓС€РµРЅРёСЏ С†РµР»РѕСЃС‚РЅРѕСЃС‚Рё! РџРѕ РїСЂРёС‡РёРЅРµ СЌС‚РѕРіРѕ, РІРѕСЃРїРѕР»СЊР·СѓР№С‚РµСЃСЊ СЃРѕР·РґР°РЅРёРµРј РЅРѕРІРѕР№ Р°РІС‚РѕСЂР° РёР»Рё Р¶Рµ СѓРґР°Р»РµРЅРёРµРј СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµРіРѕ',@lang='us_english',@replace='REPLACE';
 				RAISERROR(50003,15,-1)
 			END;
 		ELSE
@@ -400,18 +400,18 @@ AS
 				INNER JOIN deleted B ON A.author_id = B.author_id
 
 				IF UPDATE(date_of_birth)
-					PRINT N'Была добавлена информация о годе рождения'
+					PRINT N'Р‘С‹Р»Р° РґРѕР±Р°РІР»РµРЅР° РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ РіРѕРґРµ СЂРѕР¶РґРµРЅРёСЏ'
 				IF UPDATE(date_of_death) 
-					PRINT N'Была добавлена информация о годе смерти'
+					PRINT N'Р‘С‹Р»Р° РґРѕР±Р°РІР»РµРЅР° РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ РіРѕРґРµ СЃРјРµСЂС‚Рё'
 				IF UPDATE(biography)
-					PRINT N'Была обновлена биография'
+					PRINT N'Р‘С‹Р»Р° РѕР±РЅРѕРІР»РµРЅР° Р±РёРѕРіСЂР°С„РёСЏ'
 
 				DECLARE @number int;
 				SET @number = (SELECT DISTINCT COUNT(*) FROM @temp_table);
 				IF @number > 1
-					PRINT N'у ' + CAST(@number AS VARCHAR(1)) + ' авторов'
+					PRINT N'Сѓ ' + CAST(@number AS VARCHAR(1)) + ' Р°РІС‚РѕСЂРѕРІ'
 				ELSE
-					PRINT N'у 1 автора'
+					PRINT N'Сѓ 1 Р°РІС‚РѕСЂР°'
 		END;
 	END
 go
@@ -427,7 +427,7 @@ AS
 	BEGIN
 		IF EXISTS (SELECT TOP 1 author_id FROM deleted WHERE author_id = 0)
 			BEGIN;
-				EXEC sp_addmessage 50004, 15,N'Удаление "Неизвестного автора" невозможно!',@lang = 'us_english', @replace='REPLACE';
+				EXEC sp_addmessage 50004, 15,N'РЈРґР°Р»РµРЅРёРµ "РќРµРёР·РІРµСЃС‚РЅРѕРіРѕ Р°РІС‚РѕСЂР°" РЅРµРІРѕР·РјРѕР¶РЅРѕ!',@lang = 'us_english', @replace='REPLACE';
 				RAISERROR(50004,15,-1)
 			END;
 		DELETE FROM Author WHERE author_id IN (SELECT author_id FROM deleted)
@@ -457,16 +457,16 @@ AS
 		INNER JOIN deleted B ON A.excursion_id = B.excursion_id
 
 		IF UPDATE(name) OR UPDATE(duration) OR UPDATE(description_excursion)
-			PRINT N'Была обновлена информация о экскурсии'
+			PRINT N'Р‘С‹Р»Р° РѕР±РЅРѕРІР»РµРЅР° РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЌРєСЃРєСѓСЂСЃРёРё'
 		IF UPDATE(museum_id) 
-			PRINT N'Данная экскурсия будет проведена в другом музее'
+			PRINT N'Р”Р°РЅРЅР°СЏ СЌРєСЃРєСѓСЂСЃРёСЏ Р±СѓРґРµС‚ РїСЂРѕРІРµРґРµРЅР° РІ РґСЂСѓРіРѕРј РјСѓР·РµРµ'
 
 		DECLARE @number int;
 		SET @number = (SELECT DISTINCT COUNT(*) FROM @temp_table);
 		IF @number > 1
-			PRINT N'у ' + CAST(@number AS VARCHAR(1)) + ' экскурсий'
+			PRINT N'Сѓ ' + CAST(@number AS VARCHAR(1)) + ' СЌРєСЃРєСѓСЂСЃРёР№'
 		ELSE
-			PRINT N'у 1 экскурсии'
+			PRINT N'Сѓ 1 СЌРєСЃРєСѓСЂСЃРёРё'
 	END;
 go
 
@@ -483,7 +483,7 @@ CREATE VIEW view_number AS
 	SELECT CAST(CAST(NEWID() AS binary(3)) AS INT) AS NextID
 go
 
--- Возвращает случайное число в интервале [a;b]
+-- Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃР»СѓС‡Р°Р№РЅРѕРµ С‡РёСЃР»Рѕ РІ РёРЅС‚РµСЂРІР°Р»Рµ [a;b]
 CREATE FUNCTION random_number(@a int,@b int)
 	RETURNS int
 	AS
@@ -543,53 +543,53 @@ go
 
 
 INSERT INTO Museum(name,city,street,house,phone_number)
-VALUES (N'Третьяковская галерея',N'Москва',N'Лаврушинский пер.', 10,84992307788),
-	   (N'Государственный Эрмитаж',N'Санкт-Петербург',N'Дворцовая пл.',2,88127109079),
-	   (N'Оружейная палата',N'Москва',N'Московский Кремль',1,84956970349),
-	   (N'Алмазный фонд',N'Москва',N'Кремль',1,84956292036),
-	   (N'Кунсткамера',N'Санкт-Петербург',N'Университетская наб.', 3,88123281412),
-	   (N'Исторический музей',N'Москва',N'Красная пл.', 1,84956924019)
+VALUES (N'РўСЂРµС‚СЊСЏРєРѕРІСЃРєР°СЏ РіР°Р»РµСЂРµСЏ',N'РњРѕСЃРєРІР°',N'Р›Р°РІСЂСѓС€РёРЅСЃРєРёР№ РїРµСЂ.', 10,84992307788),
+	   (N'Р“РѕСЃСѓРґР°СЂСЃС‚РІРµРЅРЅС‹Р№ Р­СЂРјРёС‚Р°Р¶',N'РЎР°РЅРєС‚-РџРµС‚РµСЂР±СѓСЂРі',N'Р”РІРѕСЂС†РѕРІР°СЏ РїР».',2,88127109079),
+	   (N'РћСЂСѓР¶РµР№РЅР°СЏ РїР°Р»Р°С‚Р°',N'РњРѕСЃРєРІР°',N'РњРѕСЃРєРѕРІСЃРєРёР№ РљСЂРµРјР»СЊ',1,84956970349),
+	   (N'РђР»РјР°Р·РЅС‹Р№ С„РѕРЅРґ',N'РњРѕСЃРєРІР°',N'РљСЂРµРјР»СЊ',1,84956292036),
+	   (N'РљСѓРЅСЃС‚РєР°РјРµСЂР°',N'РЎР°РЅРєС‚-РџРµС‚РµСЂР±СѓСЂРі',N'РЈРЅРёРІРµСЂСЃРёС‚РµС‚СЃРєР°СЏ РЅР°Р±.', 3,88123281412),
+	   (N'РСЃС‚РѕСЂРёС‡РµСЃРєРёР№ РјСѓР·РµР№',N'РњРѕСЃРєРІР°',N'РљСЂР°СЃРЅР°СЏ РїР».', 1,84956924019)
 
 INSERT INTO Author(surname,name,date_of_birth,date_of_death)
-VALUES (N'Неизвестный',N'автор',NULL,NULL),
-	   (N'Брюллов',N'Карл',1799,1852),
-	   (N'Шубин',N'Федот',1740,1805),
-	   (N'Рейн',N'Рембрандт Харменс',1606,1669),
-	   (N'Вигстрём',N'Хенрик',1862,1923),
-	   (N'Экарт',N'Георг-Фридрих',NULL,NULL),
-	   (N'Рюйш',N'Фредерик',1638,1731),
-	   (N'Фёдоров',N'Иван',1520,1583)
+VALUES (N'РќРµРёР·РІРµСЃС‚РЅС‹Р№',N'Р°РІС‚РѕСЂ',NULL,NULL),
+	   (N'Р‘СЂСЋР»Р»РѕРІ',N'РљР°СЂР»',1799,1852),
+	   (N'РЁСѓР±РёРЅ',N'Р¤РµРґРѕС‚',1740,1805),
+	   (N'Р РµР№РЅ',N'Р РµРјР±СЂР°РЅРґС‚ РҐР°СЂРјРµРЅСЃ',1606,1669),
+	   (N'Р’РёРіСЃС‚СЂС‘Рј',N'РҐРµРЅСЂРёРє',1862,1923),
+	   (N'Р­РєР°СЂС‚',N'Р“РµРѕСЂРі-Р¤СЂРёРґСЂРёС…',NULL,NULL),
+	   (N'Р СЋР№С€',N'Р¤СЂРµРґРµСЂРёРє',1638,1731),
+	   (N'Р¤С‘РґРѕСЂРѕРІ',N'РРІР°РЅ',1520,1583)
 
 
 INSERT INTO Exhibit(name,article_code,creation_year,type_exhibit,author_id,museum_id)
-VALUES (N'Всадница',111739707,1832,N'Живопись',1,1),
-	   (N'Екатерина II',478484108,1770,N'Скульптура',2,1),
-	   (N'Возвращение блудного сына',323779001,1665,N'Живопись',3,2),
+VALUES (N'Р’СЃР°РґРЅРёС†Р°',111739707,1832,N'Р–РёРІРѕРїРёСЃСЊ',1,1),
+	   (N'Р•РєР°С‚РµСЂРёРЅР° II',478484108,1770,N'РЎРєСѓР»СЊРїС‚СѓСЂР°',2,1),
+	   (N'Р’РѕР·РІСЂР°С‰РµРЅРёРµ Р±Р»СѓРґРЅРѕРіРѕ СЃС‹РЅР°',323779001,1665,N'Р–РёРІРѕРїРёСЃСЊ',3,2),
 
-	   -- Предположительно найдена при раскопках в Риме в феврале 1719 года -- 
-	   (N'Венера Таврическая',574648603,1719,N'Скульптура',0,2),
+	   -- РџСЂРµРґРїРѕР»РѕР¶РёС‚РµР»СЊРЅРѕ РЅР°Р№РґРµРЅР° РїСЂРё СЂР°СЃРєРѕРїРєР°С… РІ Р РёРјРµ РІ С„РµРІСЂР°Р»Рµ 1719 РіРѕРґР° -- 
+	   (N'Р’РµРЅРµСЂР° РўР°РІСЂРёС‡РµСЃРєР°СЏ',574648603,1719,N'РЎРєСѓР»СЊРїС‚СѓСЂР°',0,2),
 
-	   (N'Шапка Мономаха',319733143,1518,N'Одежда',0,3),
-	   (N'Модель Александровского Дворца в яйце из нефрита',440695975,1908,N'Драгоценности',4,3),
-	   (N'Большая императорская корона',900782316,1762,N'Одежда',5,4),
-	   (N'Держава',259607151,1762,N'Драгоценности',5,4),
-	   (N'Часть инъецированной слизистой пищевода на веточке растения',585212548,1846,N'Иное',6,5),
-	   (N'Апостол',561475366,1762,N'Иное',7,6)
+	   (N'РЁР°РїРєР° РњРѕРЅРѕРјР°С…Р°',319733143,1518,N'РћРґРµР¶РґР°',0,3),
+	   (N'РњРѕРґРµР»СЊ РђР»РµРєСЃР°РЅРґСЂРѕРІСЃРєРѕРіРѕ Р”РІРѕСЂС†Р° РІ СЏР№С†Рµ РёР· РЅРµС„СЂРёС‚Р°',440695975,1908,N'Р”СЂР°РіРѕС†РµРЅРЅРѕСЃС‚Рё',4,3),
+	   (N'Р‘РѕР»СЊС€Р°СЏ РёРјРїРµСЂР°С‚РѕСЂСЃРєР°СЏ РєРѕСЂРѕРЅР°',900782316,1762,N'РћРґРµР¶РґР°',5,4),
+	   (N'Р”РµСЂР¶Р°РІР°',259607151,1762,N'Р”СЂР°РіРѕС†РµРЅРЅРѕСЃС‚Рё',5,4),
+	   (N'Р§Р°СЃС‚СЊ РёРЅСЉРµС†РёСЂРѕРІР°РЅРЅРѕР№ СЃР»РёР·РёСЃС‚РѕР№ РїРёС‰РµРІРѕРґР° РЅР° РІРµС‚РѕС‡РєРµ СЂР°СЃС‚РµРЅРёСЏ',585212548,1846,N'РРЅРѕРµ',6,5),
+	   (N'РђРїРѕСЃС‚РѕР»',561475366,1762,N'РРЅРѕРµ',7,6)
 
 INSERT INTO Users(e_mail,surname,name)
 VALUES (N'unknown',N'No',N'Name'),
-	   (N'gosha8352@gmail.com',N'Иванов',N'Георгий'),
-	   (N'svet_peshek@gmail.com',N'Чесноков',N'Никита'),
-	   (N'dimastii428017@mail.ru',N'Кудряшов',N'Дмитрий'),
-	   (N'el_ki96@ya.ru',N'Кириллова',N'Елена')
+	   (N'gosha8352@gmail.com',N'РРІР°РЅРѕРІ',N'Р“РµРѕСЂРіРёР№'),
+	   (N'svet_peshek@gmail.com',N'Р§РµСЃРЅРѕРєРѕРІ',N'РќРёРєРёС‚Р°'),
+	   (N'dimastii428017@mail.ru',N'РљСѓРґСЂСЏС€РѕРІ',N'Р”РјРёС‚СЂРёР№'),
+	   (N'el_ki96@ya.ru',N'РљРёСЂРёР»Р»РѕРІР°',N'Р•Р»РµРЅР°')
 
 INSERT INTO Excursion(name,duration,museum_id)
-VALUES (N'Экскурсия по Третьяковской Галерее',90,1),
-	   (N'Экскурсия в Государственный Эрмитаж',300,2),
-	   (N'Государственная Оружейная палата',75,3),
-	   (N'Посещение выставки Алмазного фонда',20,4),
-	   (N'Моя Кунсткамера',90,5),
-	   (N'Шедевры Исторического Музея',90,6)
+VALUES (N'Р­РєСЃРєСѓСЂСЃРёСЏ РїРѕ РўСЂРµС‚СЊСЏРєРѕРІСЃРєРѕР№ Р“Р°Р»РµСЂРµРµ',90,1),
+	   (N'Р­РєСЃРєСѓСЂСЃРёСЏ РІ Р“РѕСЃСѓРґР°СЂСЃС‚РІРµРЅРЅС‹Р№ Р­СЂРјРёС‚Р°Р¶',300,2),
+	   (N'Р“РѕСЃСѓРґР°СЂСЃС‚РІРµРЅРЅР°СЏ РћСЂСѓР¶РµР№РЅР°СЏ РїР°Р»Р°С‚Р°',75,3),
+	   (N'РџРѕСЃРµС‰РµРЅРёРµ РІС‹СЃС‚Р°РІРєРё РђР»РјР°Р·РЅРѕРіРѕ С„РѕРЅРґР°',20,4),
+	   (N'РњРѕСЏ РљСѓРЅСЃС‚РєР°РјРµСЂР°',90,5),
+	   (N'РЁРµРґРµРІСЂС‹ РСЃС‚РѕСЂРёС‡РµСЃРєРѕРіРѕ РњСѓР·РµСЏ',90,6)
 
 
 INSERT INTO Ticket(ticket_number,date_ticket,time_ticket,cost_of,excursion_id,userID)
@@ -619,7 +619,7 @@ go
 SELECT * FROM ExhibitIndexView
 go
 
-UPDATE Users SET e_mail = N'malenkiy__budda@mail.ru' WHERE name = N'Никита'
+UPDATE Users SET e_mail = N'malenkiy__budda@mail.ru' WHERE name = N'РќРёРєРёС‚Р°'
 go
 
 UPDATE Ticket SET cost_of = cost_of * 1.15 WHERE date_ticket BETWEEN CONVERT(date,N'01-11-2016') AND CONVERT(date,N'31-12-2016')
@@ -628,7 +628,7 @@ go
 UPDATE Excursion SET duration = duration + 15 WHERE excursion_id IN (1,3,5)
 go
 
---DELETE FROM Users WHERE name LIKE '%ий'
+--DELETE FROM Users WHERE name LIKE '%РёР№'
 --go
 
 SELECT * FROM Users
@@ -640,13 +640,13 @@ go
 SELECT COUNT(DISTINCT e_mail) AS count_distinct_email_tickets FROM UserView
 go
 
--- Возвращает null-записи
+-- Р’РѕР·РІСЂР°С‰Р°РµС‚ null-Р·Р°РїРёСЃРё
 SET ANSI_NULLS OFF
 SELECT * FROM Author WHERE date_of_birth = NULL
 go
 
 
--- Не возвращает null-записи
+-- РќРµ РІРѕР·РІСЂР°С‰Р°РµС‚ null-Р·Р°РїРёСЃРё
 SET ANSI_NULLS ON
 SELECT * FROM Author WHERE date_of_birth = NULL
 go
@@ -658,13 +658,13 @@ go
 SELECT SUM(cost_of_ticket) as sum_count_of
 FROM UserView
 GROUP BY surname_user,name_user
-HAVING name_user IN (N'Никита',N'Георгий')
+HAVING name_user IN (N'РќРёРєРёС‚Р°',N'Р“РµРѕСЂРіРёР№')
 go
 
 /* SELECT AVG(cost_of_ticket) as sum_count_of
 FROM UserView
 GROUP BY surname_user,name_user
-HAVING name_user IN (N'Никита',N'Георгий')
+HAVING name_user IN (N'РќРёРєРёС‚Р°',N'Р“РµРѕСЂРіРёР№')
 go */
 
 
@@ -677,17 +677,17 @@ RIGHT JOIN dbo.Museum as M ON E.museum_id = M.museum_id
 FULL JOIN dbo.Excursion as Ex ON Ex.museum_id = M.museum_id
 go
 
---SELECT * FROM Museum WHERE name = N'Третьяковская галерея'
---UNION SELECT * FROM Museum WHERE name = N'Государственный Эрмитаж'
+--SELECT * FROM Museum WHERE name = N'РўСЂРµС‚СЊСЏРєРѕРІСЃРєР°СЏ РіР°Р»РµСЂРµСЏ'
+--UNION SELECT * FROM Museum WHERE name = N'Р“РѕСЃСѓРґР°СЂСЃС‚РІРµРЅРЅС‹Р№ Р­СЂРјРёС‚Р°Р¶'
 
 --SELECT * FROM Museum
 --UNION ALL SELECT * FROM Museum
 
 --SELECT * FROM Museum
---UNION ALL SELECT * FROM Museum WHERE name = N'Оружейная палата'
+--UNION ALL SELECT * FROM Museum WHERE name = N'РћСЂСѓР¶РµР№РЅР°СЏ РїР°Р»Р°С‚Р°'
 
 --SELECT * FROM Museum
---UNION ALL SELECT * FROM Museum WHERE name = N'Алмазный фонд'
+--UNION ALL SELECT * FROM Museum WHERE name = N'РђР»РјР°Р·РЅС‹Р№ С„РѕРЅРґ'
 
 --go
 
@@ -700,5 +700,3 @@ backup database Museum_DB
 	with format,
 	name = 'Full Backup of Museum_DB'
 go */
-
-
