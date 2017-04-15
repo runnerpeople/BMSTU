@@ -1,4 +1,4 @@
--- 1. Создать две базы данных на одном экземпляре СУБД SQL Server 2012.
+-- 1. РЎРѕР·РґР°С‚СЊ РґРІРµ Р±Р°Р·С‹ РґР°РЅРЅС‹С… РЅР° РѕРґРЅРѕРј СЌРєР·РµРјРїР»СЏСЂРµ РЎРЈР‘Р” SQL Server 2012.
 use master;
 go
 if DB_ID (N'lab13_1') is not null
@@ -43,7 +43,7 @@ FILEGROWTH = 5
 );
 go 
 
--- 2. Создать в базах данных п.1. горизонтально фрагментированные таблицы.
+-- 2. РЎРѕР·РґР°С‚СЊ РІ Р±Р°Р·Р°С… РґР°РЅРЅС‹С… Рї.1. РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕ С„СЂР°РіРјРµРЅС‚РёСЂРѕРІР°РЅРЅС‹Рµ С‚Р°Р±Р»РёС†С‹.
 
 use lab13_1;
 go
@@ -81,9 +81,9 @@ CREATE TABLE Users (
 	);
 go
 
--- 3. Создать секционированные представления, 
--- обеспечивающие работу с данными таблиц
--- (выборку, вставку, изменение, удаление).
+-- 3. РЎРѕР·РґР°С‚СЊ СЃРµРєС†РёРѕРЅРёСЂРѕРІР°РЅРЅС‹Рµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ, 
+-- РѕР±РµСЃРїРµС‡РёРІР°СЋС‰РёРµ СЂР°Р±РѕС‚Сѓ СЃ РґР°РЅРЅС‹РјРё С‚Р°Р±Р»РёС†
+-- (РІС‹Р±РѕСЂРєСѓ, РІСЃС‚Р°РІРєСѓ, РёР·РјРµРЅРµРЅРёРµ, СѓРґР°Р»РµРЅРёРµ).
 
 use lab13_1;
 go
@@ -114,10 +114,9 @@ go
 INSERT INTO UserView VALUES 
 	(1,'gosha8352@gmail.com','Ivanov','George', 'Michailovich','88005553535'),
 	(2,'dimachik428017@mail.ru','Kudryashov','Dima','Petrovich','8800808080'),
-	(3,'svet_peshek@gmail.com','Chesnokov','Nikita','Nikolaevich','8919242947'),
-	(4,'vlad_vorman@ya.ru','Stachuk','Vladislav','Nikolaevich','38567863281'),
-	(5,'alex_semen@ya.ru','Semennikov','Alexander','Vladislavovich','8924731913'),
-	(6,'avarti@mail.ru','Averbach','Artyom','Dmitrievich','89274287742')
+	(3,'vlad_vorman@ya.ru','Stachuk','Vladislav','Nikolaevich','38567863281'),
+	(4,'alex_semen@ya.ru','Semennikov','Alexander','Vladislavovich','8924731913'),
+	(5,'avarti@mail.ru','Averbach','Artyom','Dmitrievich','89274287742')
 
 
 SELECT * FROM UserView;
