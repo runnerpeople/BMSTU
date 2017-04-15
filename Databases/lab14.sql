@@ -1,4 +1,4 @@
--- Cоздание вертикально фрагментированных таблиц средствами СУБД SQL Server 2012
+-- CРѕР·РґР°РЅРёРµ РІРµСЂС‚РёРєР°Р»СЊРЅРѕ С„СЂР°РіРјРµРЅС‚РёСЂРѕРІР°РЅРЅС‹С… С‚Р°Р±Р»РёС† СЃСЂРµРґСЃС‚РІР°РјРё РЎРЈР‘Р” SQL Server 2012
 
 use master;
 go
@@ -44,7 +44,7 @@ FILEGROWTH = 5
 );
 go 
 
--- 1.Создать в базах данных пункта 1 задания 13 таблицы, содержащие вертикально фрагментированные данные.
+-- 1.РЎРѕР·РґР°С‚СЊ РІ Р±Р°Р·Р°С… РґР°РЅРЅС‹С… РїСѓРЅРєС‚Р° 1 Р·Р°РґР°РЅРёСЏ 13 С‚Р°Р±Р»РёС†С‹, СЃРѕРґРµСЂР¶Р°С‰РёРµ РІРµСЂС‚РёРєР°Р»СЊРЅРѕ С„СЂР°РіРјРµРЅС‚РёСЂРѕРІР°РЅРЅС‹Рµ РґР°РЅРЅС‹Рµ.
 
 use lab14_1;
 go
@@ -57,8 +57,8 @@ CREATE TABLE Cinema (
 	cinema_id int NOT NULL PRIMARY KEY,
 	producer nchar(50) NOT NULL,
 	name nchar(50) NOT NULL,
-	genre nchar(20) NOT NULL CHECK (genre IN (N'Комедия',N'Боевик',N'Ужасы',N'Фантастика',
-											N'Драма', N'Семейный',N'Мультфильм')),
+	genre nchar(20) NOT NULL CHECK (genre IN (N'РљРѕРјРµРґРёСЏ',N'Р‘РѕРµРІРёРє',N'РЈР¶Р°СЃС‹',N'Р¤Р°РЅС‚Р°СЃС‚РёРєР°',
+											N'Р”СЂР°РјР°', N'РЎРµРјРµР№РЅС‹Р№',N'РњСѓР»СЊС‚С„РёР»СЊРј')),
 	--year_issue numeric(4) NOT NULL CHECK (year_issue>1900 AND year_issue<2017),
 	--budget money NULL CHECK (budget > 0.0)
 )
@@ -75,20 +75,20 @@ CREATE TABLE Cinema (
 	cinema_id int NOT NULL PRIMARY KEY,
 	--producer nchar(50) NOT NULL,
 	--name nchar(50) NOT NULL,
-	--genre nchar(20) NOT NULL CHECK (genre IN (N'Комедия',N'Боевик',N'Ужасы',N'Фантастика',
-	--										    N'Драма', N'Семейный',N'Мультфильм')),
+	--genre nchar(20) NOT NULL CHECK (genre IN (N'РљРѕРјРµРґРёСЏ',N'Р‘РѕРµРІРёРє',N'РЈР¶Р°СЃС‹',N'Р¤Р°РЅС‚Р°СЃС‚РёРєР°',
+	--										    N'Р”СЂР°РјР°', N'РЎРµРјРµР№РЅС‹Р№',N'РњСѓР»СЊС‚С„РёР»СЊРј')),
 	year_issue numeric(4) NOT NULL CHECK (year_issue>1900 AND year_issue<2017),
 	budget money NULL CHECK (budget > 0.0)
 )
 go
 
--- Параметр сервера "lazy schema validation" недоступен в данном выпуске SQL Server.
+-- РџР°СЂР°РјРµС‚СЂ СЃРµСЂРІРµСЂР° "lazy schema validation" РЅРµРґРѕСЃС‚СѓРїРµРЅ РІ РґР°РЅРЅРѕРј РІС‹РїСѓСЃРєРµ SQL Server.
 -- EXEC sp_serveroption 'OtherServer','lazy schema validation', 'true'
 -- go
 
--- 2.Создать необходимые элементы базы данных (представления, триггеры), 
--- обеспечивающие работу с данными вертикально фрагментированных таблиц 
--- (выборку, вставку, изменение, удаление). 
+-- 2.РЎРѕР·РґР°С‚СЊ РЅРµРѕР±С…РѕРґРёРјС‹Рµ СЌР»РµРјРµРЅС‚С‹ Р±Р°Р·С‹ РґР°РЅРЅС‹С… (РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ, С‚СЂРёРіРіРµСЂС‹), 
+-- РѕР±РµСЃРїРµС‡РёРІР°СЋС‰РёРµ СЂР°Р±РѕС‚Сѓ СЃ РґР°РЅРЅС‹РјРё РІРµСЂС‚РёРєР°Р»СЊРЅРѕ С„СЂР°РіРјРµРЅС‚РёСЂРѕРІР°РЅРЅС‹С… С‚Р°Р±Р»РёС† 
+-- (РІС‹Р±РѕСЂРєСѓ, РІСЃС‚Р°РІРєСѓ, РёР·РјРµРЅРµРЅРёРµ, СѓРґР°Р»РµРЅРёРµ). 
 
 if OBJECT_ID(N'CinemaView',N'V') is NOT NULL
 	DROP VIEW CinemaView;
@@ -115,7 +115,7 @@ AS
 							inserted AS I
 					   WHERE A.name = I.name AND A.producer = I.name AND B.year_issue = I.year_issue)
 			BEGIN
-				EXEC sp_addmessage 50003, 15,N'Добавление дубликата фильма!',@lang='us_english',@replace='REPLACE';
+				EXEC sp_addmessage 50003, 15,N'Р”РѕР±Р°РІР»РµРЅРёРµ РґСѓР±Р»РёРєР°С‚Р° С„РёР»СЊРјР°!',@lang='us_english',@replace='REPLACE';
 				RAISERROR(50003,15,-1)
 			END
 		ELSE
@@ -124,7 +124,7 @@ AS
 							  inserted AS I
 					   WHERE A.cinema_id = I.cinema_id)
 				BEGIN
-					EXEC sp_addmessage 50004, 15,N'ID занят! Попробуйте другой',@lang='us_english',@replace='REPLACE';
+					EXEC sp_addmessage 50004, 15,N'ID Р·Р°РЅСЏС‚! РџРѕРїСЂРѕР±СѓР№С‚Рµ РґСЂСѓРіРѕР№',@lang='us_english',@replace='REPLACE';
 					RAISERROR(50004,15,-1)
 				END
 			ELSE
@@ -139,13 +139,13 @@ AS
 go
 
 INSERT INTO CinemaView(cinema_id,producer,name,genre,year_issue)
-VALUES (1,N'Джон Лукас',N'21 и больше', N'Комедия', 2013),
-	   (2,N'Эрик Дарнелл',N'Мадагаскар', N'Мультфильм', 2005),
-	   (3,N'Джон Мактирнан',N'Крепкий Орешек', N'Боевик', 1988),
-	   (4,N'Уэс Крэйвен',N'Крик', N'Ужасы', 1996),
-	   (5,N'Джеймс Кэмерон',N'Аватар', N'Фантастика', 2009),
-	   (6,N'Джерри Цукер',N'Привидение', N'Драма', 1990),
-	   (7,N'Крис Коламбус',N'Один дома', N'Семейный', 1990)
+VALUES (1,N'Р”Р¶РѕРЅ Р›СѓРєР°СЃ',N'21 Рё Р±РѕР»СЊС€Рµ', N'РљРѕРјРµРґРёСЏ', 2013),
+	   (2,N'Р­СЂРёРє Р”Р°СЂРЅРµР»Р»',N'РњР°РґР°РіР°СЃРєР°СЂ', N'РњСѓР»СЊС‚С„РёР»СЊРј', 2005),
+	   (3,N'Р”Р¶РѕРЅ РњР°РєС‚РёСЂРЅР°РЅ',N'РљСЂРµРїРєРёР№ РћСЂРµС€РµРє', N'Р‘РѕРµРІРёРє', 1988),
+	   (4,N'РЈСЌСЃ РљСЂСЌР№РІРµРЅ',N'РљСЂРёРє', N'РЈР¶Р°СЃС‹', 1996),
+	   (5,N'Р”Р¶РµР№РјСЃ РљСЌРјРµСЂРѕРЅ',N'РђРІР°С‚Р°СЂ', N'Р¤Р°РЅС‚Р°СЃС‚РёРєР°', 2009),
+	   (6,N'Р”Р¶РµСЂСЂРё Р¦СѓРєРµСЂ',N'РџСЂРёРІРёРґРµРЅРёРµ', N'Р”СЂР°РјР°', 1990),
+	   (7,N'РљСЂРёСЃ РљРѕР»Р°РјР±СѓСЃ',N'РћРґРёРЅ РґРѕРјР°', N'РЎРµРјРµР№РЅС‹Р№', 1990)
 go
 
 SELECT * FROM CinemaView
@@ -163,12 +163,12 @@ AS
 	BEGIN
 		IF UPDATE(cinema_id)
 			BEGIN
-				EXEC sp_addmessage 50001, 15,N'Запрещено изменение ID фильма',@lang='us_english',@replace='REPLACE';
+				EXEC sp_addmessage 50001, 15,N'Р—Р°РїСЂРµС‰РµРЅРѕ РёР·РјРµРЅРµРЅРёРµ ID С„РёР»СЊРјР°',@lang='us_english',@replace='REPLACE';
 				RAISERROR(50001,15,-1)
 			END
 		IF UPDATE(producer) OR UPDATE(name) OR UPDATE(genre) OR UPDATE(year_issue)
 			BEGIN
-				EXEC sp_addmessage 50002, 15,N'Запрещено изменение информации о фильме. В следствие избежания нарушения целостности, нужно воспользоваться удалением и созданием нового фильма',@lang='us_english',@replace='REPLACE';
+				EXEC sp_addmessage 50002, 15,N'Р—Р°РїСЂРµС‰РµРЅРѕ РёР·РјРµРЅРµРЅРёРµ РёРЅС„РѕСЂРјР°С†РёРё Рѕ С„РёР»СЊРјРµ. Р’ СЃР»РµРґСЃС‚РІРёРµ РёР·Р±РµР¶Р°РЅРёСЏ РЅР°СЂСѓС€РµРЅРёСЏ С†РµР»РѕСЃС‚РЅРѕСЃС‚Рё, РЅСѓР¶РЅРѕ РІРѕСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ СѓРґР°Р»РµРЅРёРµРј Рё СЃРѕР·РґР°РЅРёРµРј РЅРѕРІРѕРіРѕ С„РёР»СЊРјР°',@lang='us_english',@replace='REPLACE';
 				RAISERROR(50002,15,-1)
 			END
 
@@ -190,8 +190,8 @@ go
 UPDATE CinemaView SET budget = $10000000.00 WHERE year_issue > 2000
 go
 
---Возникновение ошибки --
---UPDATE CinemaView SET cinema_id = 10 WHERE name=N'21 и больше'
+--Р’РѕР·РЅРёРєРЅРѕРІРµРЅРёРµ РѕС€РёР±РєРё --
+--UPDATE CinemaView SET cinema_id = 10 WHERE name=N'21 Рё Р±РѕР»СЊС€Рµ'
 --go
 
 SELECT * FROM CinemaView
@@ -211,7 +211,7 @@ AS
 	END
 go
 
-DELETE FROM CinemaView WHERE genre IN (N'Комедия',N'Боевик',N'Ужасы')
+DELETE FROM CinemaView WHERE genre IN (N'РљРѕРјРµРґРёСЏ',N'Р‘РѕРµРІРёРє',N'РЈР¶Р°СЃС‹')
 go
 
 SELECT * FROM CinemaView
