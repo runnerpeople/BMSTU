@@ -1,0 +1,56 @@
+(define (list->set xs)
+  (if (not (null? xs))
+      (begin
+        (if (not (null? (cdr xs)))
+            (begin
+              (do ((x xs (cdr x)))
+                ((not (or (null? (cdr x)) (equal? (car x) (car (cdr x))))) (cons (car x) (list->set (cdr x))))))
+            (cons (car xs) (list->set '()))))
+      xs))
+(define (set? xs)
+  (if (not (null? xs))
+      (begin
+        (if (not (null? (cdr xs)))
+            (begin
+              (do ((x xs (cdr x)))
+                ((or (null? (cdr x)) (equal? (car x) (car (cdr x)))) 
+                 (if (null? (cdr x))
+                     (= 1 1)
+                     (= 1 2)))))
+            (= 1 1)))
+      (= 1 1)))
+(define (union xs ys)
+  (cond ((null? xs) ys)
+        ((null? ys) xs)
+        (else
+         (begin
+           (if (and (null? (cdr xs)) (not (memq (car xs) ys)))
+               (cons (car xs) ys)
+               (begin
+                 (if (memq (car xs) ys)
+                     (union (cdr xs) ys)
+                     (cons (car xs) (union (cdr xs) ys)))))))))
+(define (intersection xs ys)
+  (cond ((null? xs) '())
+        ((memq (car xs) ys) (cons (car xs) (intersection (cdr xs) ys)))
+        (else (intersection (cdr xs) ys))))
+(define (difference xs ys)
+  (if (null? xs)
+      '()
+      (begin
+        (if (and (null? (cdr xs)) (member (car xs) ys)) 
+            '()
+            (begin
+              (if (member (car xs) ys)
+                  (difference (cdr xs) ys)
+                  (cons (car xs) (difference (cdr xs) ys))))))))
+(define (symmetric-difference xs ys)
+  (union (difference xs ys) (difference ys xs)))
+(define (set-eq? xs ys) 
+  (cond ((and (null? xs) (null? ys)) (= 1 1)) 
+        ((null? ys) (= 1 2))
+        ((null? xs) (= 1 2))
+        ((equal? (car xs) (car ys)) (set-eq? (cdr xs) (cdr ys)))
+        ((equal? (car xs) (car (reverse ys))) (set-eq? (cdr xs) (cdr (reverse ys))))
+        (else (= 1 2))))
+

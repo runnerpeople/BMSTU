@@ -1,0 +1,27 @@
+(define (rpn lst)
+  (define (f stack stackop xs)
+  (cond ((and (not (null? xs)) (operator+? (car xs)) (null? stackop)) (f stack (cons (car xs) stackop) (cdr xs)))
+        ((and (not (null? xs)) (equal? (car xs) '>)) (f (append stack (help '() (reverse stackop))) (reverse (cdr (memq '< (reverse stackop)))) (cdr xs)))
+        ((and (not (null? xs)) (operator+? (car xs)) (not (equal? (car xs) '<)) (not (memq '< stackop)) (or (and (= (prioritet (car xs) (car (reverse stackop))) 0) (= (fold (car xs)) 0)) (and (= (prioritet (car xs) (car (reverse stackop))) 0) (= (fold (car xs)) 1))))  (f (append stack (reverse stackop)) (cons (car xs) '()) (cdr xs)))
+        ((and (not (null? xs)) (operator+? (car xs)) (f stack (append stackop (cons (car xs) '())) (cdr xs))))
+        ((and (not (null? xs)) (null? stack)) (f (cons (car xs) stack) stackop (cdr xs)))
+        ((and (not (null? xs)) (f (append stack (cons (car xs) '())) stackop (cdr xs))))
+        (else (append stack (reverse stackop)))))
+  (f '() '() lst))
+
+(define (operator+? xs)
+  (or (equal? xs '+) (equal? xs '-) (equal? xs '*) (equal? xs '/) (equal? xs '<)))
+(define (prioritet xs xs1)
+  (cond ((and (or (equal? xs '*) (equal? xs '/)) (or (equal? xs1 '+) (equal? xs1 '-))) 1)
+        ((and (or (equal? xs '*) (equal? xs '/))  (or (equal? xs1 '*) (equal? xs1 '/))) 2)
+        ((and (or (equal? xs '+) (equal? xs '-))  (or (equal? xs1 '+) (equal? xs1 '-))) 2)
+        (else 0)))
+(define (fold xs)
+  (if (or (equal? xs '+) (equal? xs '*))
+      1
+      0)) 
+(define (help a lst)
+  (if (equal? (car lst) '<)
+      a
+(help (append a (cons (car lst) '())) (cdr lst)))) 
+  

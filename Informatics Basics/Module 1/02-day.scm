@@ -1,0 +1,10 @@
+(define (day-of-week dd mm year)
+  (define v  (quotient year 400))
+  (define v1 (quotient year 100))
+  (define v2 (quotient year 4))
+  (if (or (< mm 2) (= mm 2))
+      (begin
+        (let* ((year (- year 1))
+               (dd (+ dd 3)))
+        (remainder (remainder (+ dd year v2 (- v1) v (quotient (+ (* 31 mm) 10) 12)) 7) 7)))
+      (remainder (+ (remainder (+ dd year v2 (- v1) v (quotient (+ (* 31 mm) 10) 12)) 7) 1) 7)))

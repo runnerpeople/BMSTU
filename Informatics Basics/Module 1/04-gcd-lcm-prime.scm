@@ -1,0 +1,13 @@
+(define (my-gcd a b)
+  (define c (remainder a b))
+  (define d (remainder b a))
+  (if (or (= c 0) (= d 0))
+      c
+      (if (> c d)
+          (my-gcd d a)
+          (my-gcd c b))))
+(define (my-lcm a b)
+  (/ (* a b) (my-gcd a b)))
+(define (prime? n)
+  (define a 10)
+  (= (remainder (expt a (- n 1)) n) 1))
