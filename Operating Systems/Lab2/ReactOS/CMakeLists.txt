@@ -1,0 +1,5 @@
+add_library(mydriver SHARED mydriver.c mydriver.rc)
+set_module_type(mydriver kernelmodedriver)
+add_importlibs(mydriver ntoskrnl hal)
+add_cd_file(TARGET mydriver DESTINATION reactos/system32/drivers FOR all)
+add_registry_inf(mydriver.inf)

@@ -1,0 +1,7 @@
+; Mydriver
+[AddReg]
+HKLM,"SYSTEM\CurrentControlSet\Services\mydriver","ErrorControl",0x00010001,0x00000000
+HKLM,"SYSTEM\CurrentControlSet\Services\mydriver","Group",0x00000000,"Base"
+HKLM,"SYSTEM\CurrentControlSet\Services\mydriver","ImagePath",0x00020000,"system32\drivers\mydriver.sys"
+HKLM,"SYSTEM\CurrentControlSet\Services\mydriver","Start",0x00000001,0x00000003
+HKLM,"SYSTEM\CurrentControlSet\Services\mydriver","Type",0x00010001,0x00000001
