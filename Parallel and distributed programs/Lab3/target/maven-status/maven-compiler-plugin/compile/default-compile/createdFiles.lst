@@ -1,0 +1,7 @@
+bmstu/iu9/AirportMapper.class
+bmstu/iu9/JoinComparator.class
+bmstu/iu9/JoinPartitioner.class
+bmstu/iu9/JoinApp.class
+bmstu/iu9/JoinWritableComparable.class
+bmstu/iu9/JoinReducer.class
+bmstu/iu9/FlightMapper.class

@@ -1,0 +1,7 @@
+/home/runnerpeople/IdeaProjects/Hadoop_Lab3/src/main/java/bmstu/iu9/JoinComparator.java
+/home/runnerpeople/IdeaProjects/Hadoop_Lab3/src/main/java/bmstu/iu9/JoinReducer.java
+/home/runnerpeople/IdeaProjects/Hadoop_Lab3/src/main/java/bmstu/iu9/JoinPartitioner.java
+/home/runnerpeople/IdeaProjects/Hadoop_Lab3/src/main/java/bmstu/iu9/JoinApp.java
+/home/runnerpeople/IdeaProjects/Hadoop_Lab3/src/main/java/bmstu/iu9/FlightMapper.java
+/home/runnerpeople/IdeaProjects/Hadoop_Lab3/src/main/java/bmstu/iu9/JoinWritableComparable.java
+/home/runnerpeople/IdeaProjects/Hadoop_Lab3/src/main/java/bmstu/iu9/AirportMapper.java

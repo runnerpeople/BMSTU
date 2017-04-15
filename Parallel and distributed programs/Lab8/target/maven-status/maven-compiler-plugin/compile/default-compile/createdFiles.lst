@@ -1,0 +1,6 @@
+ru/bmstu/iu9/DayAggregator.class
+ru/bmstu/iu9/BatchSpout.class
+ru/bmstu/iu9/SplitFunction.class
+ru/bmstu/iu9/PrintFilter.class
+ru/bmstu/iu9/TridentApp.class
+ru/bmstu/iu9/FlightFilter.class

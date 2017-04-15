@@ -1,0 +1,6 @@
+/home/runnerpeople/IdeaProjects/Hadoop_Labs/Hadoop_Lab8/src/main/java/ru/bmstu/iu9/SplitFunction.java
+/home/runnerpeople/IdeaProjects/Hadoop_Labs/Hadoop_Lab8/src/main/java/ru/bmstu/iu9/FlightFilter.java
+/home/runnerpeople/IdeaProjects/Hadoop_Labs/Hadoop_Lab8/src/main/java/ru/bmstu/iu9/BatchSpout.java
+/home/runnerpeople/IdeaProjects/Hadoop_Labs/Hadoop_Lab8/src/main/java/ru/bmstu/iu9/DayAggregator.java
+/home/runnerpeople/IdeaProjects/Hadoop_Labs/Hadoop_Lab8/src/main/java/ru/bmstu/iu9/TridentApp.java
+/home/runnerpeople/IdeaProjects/Hadoop_Labs/Hadoop_Lab8/src/main/java/ru/bmstu/iu9/PrintFilter.java

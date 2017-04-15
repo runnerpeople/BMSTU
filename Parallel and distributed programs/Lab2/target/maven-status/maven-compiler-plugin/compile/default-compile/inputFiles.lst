@@ -1,0 +1,6 @@
+/home/runnerpeople/IdeaProjects/Hadoop_Lab2/src/main/java/bmstu/iu9/FlightComparator.java
+/home/runnerpeople/IdeaProjects/Hadoop_Lab2/src/main/java/bmstu/iu9/FlightMapper.java
+/home/runnerpeople/IdeaProjects/Hadoop_Lab2/src/main/java/bmstu/iu9/SortApp.java
+/home/runnerpeople/IdeaProjects/Hadoop_Lab2/src/main/java/bmstu/iu9/FlightReducer.java
+/home/runnerpeople/IdeaProjects/Hadoop_Lab2/src/main/java/bmstu/iu9/FlightPartitioner.java
+/home/runnerpeople/IdeaProjects/Hadoop_Lab2/src/main/java/bmstu/iu9/FlightWritableComparable.java

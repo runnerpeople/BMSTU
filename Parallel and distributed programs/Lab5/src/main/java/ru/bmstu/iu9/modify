@@ -1,0 +1,69 @@
+JavaPairRDD<Tuple2<Integer,Integer>,FlightSerializable> flightData = flightsNoTitle.mapToPair(new PairFunction<String[], Tuple2<Integer, Integer>, FlightSerializable>() {
+    @Override
+    public Tuple2<Tuple2<Integer, Integer>, FlightSerializable> call(String[] strings) throws Exception {
+        int originAirportID = Integer.parseInt(strings[ORIGIN_AIRPORT_ID]);
+        int destAirportID = Integer.parseInt(strings[DEST_AIRPORT_ID]);
+        float delayTime = (strings[DELAY_TIME].equals(NULL_STRING)) ? F_ZERO : Float.parseFloat(strings[DELAY_TIME]);
+        float isCancelled = Float.parseFloat(strings[IS_CANCELLED]);
+        if (strings[IS_CANCELLED].equals(S_ONE))
+            return new Tuple2<>(new Tuple2<>(originAirportID,destAirportID),
+                    new FlightSerializable(originAirportID,destAirportID,F_ZERO,isCancelled));
+        else if (delayTime > F_ZERO)
+            return new Tuple2<>(new Tuple2<>(originAirportID,destAirportID),
+                    new FlightSerializable(originAirportID,destAirportID,delayTime,isCancelled));
+        else
+            return new Tuple2<>(new Tuple2<>(originAirportID,destAirportID),
+                    new FlightSerializable(originAirportID,destAirportID,F_ZERO,isCancelled));
+    }
+});
+
+JavaPairRDD<Tuple2<Integer,Integer>,String> flightDataResult = flightDataGroup.mapToPair(new PairFunction<Tuple2<Tuple2<Integer, Integer>, Iterable<FlightSerializable>>, Tuple2<Integer, Integer>, String>() {
+    @Override
+    public Tuple2<Tuple2<Integer, Integer>, String> call(Tuple2<Tuple2<Integer, Integer>, Iterable<FlightSerializable>> tuple2IterableTuple2) throws Exception {
+        Tuple2<Integer,Integer> key = tuple2IterableTuple2._1();
+        Iterable<FlightSerializable> values = tuple2IterableTuple2._2();
+
+        int countFlights = 0;
+        int countCancelledFlights = 0;
+        int countDelayFlights = 0;
+        float maxDelay = F_ZERO;
+
+        for (FlightSerializable value : values) {
+            if (value.getCancelled()==F_ONE)
+                countCancelledFlights++;
+            else {
+                float delayTime = value.getDelayTime();
+                if (delayTime>F_ZERO) {
+                    if (maxDelay < delayTime)
+                        maxDelay = delayTime;
+                    countDelayFlights++;
+                }
+            }
+            countFlights++;
+        }
+
+        float delayPercent = countDelayFlights * F_ONE_HUNDRED / countFlights;
+        float cancelPercent = countCancelledFlights * F_ONE_HUNDRED / countCancelledFlights;
+
+        String output = "Count all flights: " + countFlights + ", Statistics: ";
+        output += "Cancelled flights[" + countCancelledFlights + "/" + countFlights + "]: " + cancelPercent + "%; ";
+        output += "Delayed flights[" + countDelayFlights + "/" + countFlights + "]: " + delayPercent + "%; ";
+        output += "Max delay time flight: " + maxDelay;
+
+        return new Tuple2<>(key,output);
+    }
+});
+
+JavaRDD<String> result = flightDataResult.map(new Function<Tuple2<Tuple2<Integer, Integer>, String>, String>() {
+    @Override
+    public String call(Tuple2<Tuple2<Integer, Integer>, String> tuple2StringTuple2) throws Exception {
+        Map<Integer,String> airportsOriginDestID = airportsBroadcasted.value();
+        Tuple2<Integer,Integer> key = tuple2StringTuple2._1();
+        String value = tuple2StringTuple2._2();
+
+        String originAirportName = airportsOriginDestID.get(key._1());
+        String destAirportName = airportsOriginDestID.get(key._2());
+
+        return "From: " + originAirportName + " -> " + destAirportName + "\t " + value;
+    }
+});

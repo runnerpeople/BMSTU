@@ -1,0 +1,71 @@
+# PIG Latin #
+airports = LOAD 'L_AIRPORT_ID.csv' using PigStorage(',') AS(code:chararray,description1:chararray,description2:chararray);
+# Delete first row #
+airports = rank airports;
+airports = FILTER airports BY (rank_airports >(long)1);
+airports = FOREACH airports GENERATE (INT)REPLACE(code,'\\"','') as code, CONCAT(REPLACE(description1,'\\"',''),',',REPLACE(description2,'\\"','')) as description;
+flights = LOAD '664600583_T_ONTIME_sample.csv' using PigStorage(',') as 
+	(year:int,quarter:int,month:int,day_of_month:int,day_of_week:int,
+	fl_date:chararray,unique_carrier:chararray,airline_id:int,carrier:chararray,
+	tail_num:chararray,fl_num:chararray,origin_airport_id:int,origin_airport_seq_id:int,
+	origin_city_market_id:int,dest_airport_id:int,wheels_on:chararray,arr_time:chararray,
+	arr_delay:float,arr_delay_new:float,cancelled:float,cancellation_code:float,air_time:float,distance:float);
+flights = rank flights;
+# Delete first row #
+flights = FILTER flights by (rank_flights>(long)1);
+# Sort by delay_time > 0 #
+flights = FILTER flights by (arr_delay>(FLOAT)0.00);
+flights = FOREACH flights GENERATE (INT)dest_airport_id,(FLOAT)arr_delay;
+# Join by dest_airport_id and code #
+joined_value = JOIN airports by code, flights by dest_airport_id;
+joined_table = FOREACH joined_value GENERATE airports::description as airport_name, flights::arr_delay as arr_delay;
+# Group by airport_name for aggregation functions(MIN,AVG,MAX) #
+joined_group_table = GROUP joined_table BY airport_name;
+# Result #
+result = FOREACH joined_group_table GENERATE group as airport_name,MIN(joined_table.arr_delay) as min_arr_delay,AVG(joined_table.arr_delay) as avg_arr_delay,MAX(joined_table.arr_delay) as max_arr_delay;
+# Store result into hdfs #
+STORE result INTO 'result' USING PigStorage(',');
+dump result;
+
+
+# Доп.задание #
+# Для каждого аэропорта, вывести день недели, в который максимальное количество задержек ("несчастливый день") # 
+
+...
+flights = FOREACH flights GENERATE (INT)dest_airport_id,(FLOAT)arr_delay,(INT)day_of_week;
+...
+joined_table = FOREACH joined_value GENERATE airports::description as airport_name, flights::arr_delay as arr_delay, flights::day_of_week as day_of_week;
+joined_group_table = GROUP joined_table BY (airport_name,day_of_week);
+delay_table = FOREACH joined_group_table GENERATE FLATTEN(group) as (airport_name,day_of_week),(INT)COUNT(joined_table) as count_delays;
+delay_group_table = GROUP delay_table BY airport_name;
+max_delays_table = FOREACH delay_group_table GENERATE group as airport_name, MAX(delay_table.count_delays) as count_delays;
+result_table = JOIN delay_table BY airport_name,max_delays_table BY airport_name;
+result_table = FOREACH result_table GENERATE delay_table::airport_name as airport_name, delay_table::day_of_week as day_of_week, delay_table::count_delays as count_delays, max_delays_table::count_delays as max_delays;
+result_table = FILTER result_table BY (count_delays==max_delays);
+
+# Для красивого вывода #
+days = LOAD 'DAY_TABLE.csv' using PigStorage(',') AS (day_of_week:int,name_of_day:chararray);
+days = rank days;
+days = FILTER days BY (rank_days>(long)1);
+days = FOREACH days GENERATE day_of_week,name_of_day;
+# ==================== #
+
+joined_result_table = JOIN result_table BY day_of_week,days BY day_of_week;
+result = FOREACH joined_result_table GENERATE result_table::airport_name as airport_name,days::name_of_day as name_of_day;
+
+# Если "несчастливых дней" больше, чем 1 #
+group_result = GROUP result BY airport_name;
+group_result = FOREACH group_result GENERATE group as airport_name,$1.name_of_day;
+# ==================== #
+
+STORE result INTO 'result2' USING PigStorage(',');
+STORE group_result INTO 'group_result' USING PigStorage(',');
+dump result;
+dump group_result;
+
+# ============================================================================================================ #
+
+quit;
+
+
+

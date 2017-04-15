@@ -1,0 +1,6 @@
+To create table
+hbase(main):001:0> create 'flights','data'
+
+To delete table
+hbase(main):002:0> disable 'flights'
+hbase(main):003:0> drop 'flights'
