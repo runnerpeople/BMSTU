@@ -1,4 +1,4 @@
--- Создание распределенных баз данных со связанными таблицами средствами СУБД SQL Server 2012
+-- РЎРѕР·РґР°РЅРёРµ СЂР°СЃРїСЂРµРґРµР»РµРЅРЅС‹С… Р±Р°Р· РґР°РЅРЅС‹С… СЃРѕ СЃРІСЏР·Р°РЅРЅС‹РјРё С‚Р°Р±Р»РёС†Р°РјРё СЃСЂРµРґСЃС‚РІР°РјРё РЎРЈР‘Р” SQL Server 2012
 
 use master;
 go
@@ -44,7 +44,7 @@ FILEGROWTH = 5
 );
 go 
 
--- 1.Создать в базах данных пункта 1 задания 13 связанные таблицы.
+-- 1.РЎРѕР·РґР°С‚СЊ РІ Р±Р°Р·Р°С… РґР°РЅРЅС‹С… РїСѓРЅРєС‚Р° 1 Р·Р°РґР°РЅРёСЏ 13 СЃРІСЏР·Р°РЅРЅС‹Рµ С‚Р°Р±Р»РёС†С‹.
 
 use lab15_1;
 go
@@ -56,16 +56,16 @@ go
 CREATE TABLE Book (
 	book_id int NOT NULL PRIMARY KEY,
 	name nchar(50) NOT NULL,
-	genre nchar(20) NOT NULL CHECK (genre IN (N'Роман',N'Научная фантастика',N'Драма',N'Детектив',
-											N'Мистика', N'Поэзия',N'Сказка', N'Фантастика', N'Пьеса')),
+	genre nchar(20) NOT NULL CHECK (genre IN (N'Р РѕРјР°РЅ',N'РќР°СѓС‡РЅР°СЏ С„Р°РЅС‚Р°СЃС‚РёРєР°',N'Р”СЂР°РјР°',N'Р”РµС‚РµРєС‚РёРІ',
+											N'РњРёСЃС‚РёРєР°', N'РџРѕСЌР·РёСЏ',N'РЎРєР°Р·РєР°', N'Р¤Р°РЅС‚Р°СЃС‚РёРєР°', N'РџСЊРµСЃР°')),
 	publish_year numeric(4) NOT NULL,
 	cost_of smallmoney NULL CHECK (cost_of > 0),
 	author_id int NOT NULL,
 
-	-- Реализовать вручную! Таблицы "связаны" только условно, через триггеры -- 
+	-- Р РµР°Р»РёР·РѕРІР°С‚СЊ РІСЂСѓС‡РЅСѓСЋ! РўР°Р±Р»РёС†С‹ "СЃРІСЏР·Р°РЅС‹" С‚РѕР»СЊРєРѕ СѓСЃР»РѕРІРЅРѕ, С‡РµСЂРµР· С‚СЂРёРіРіРµСЂС‹ -- 
 	-- CONSTRAINT FK_library FOREIGN KEY (author_id) REFERENCES Library (author_id),
 
-	-- Реализовать вручную! Также через INSERT-триггер --
+	-- Р РµР°Р»РёР·РѕРІР°С‚СЊ РІСЂСѓС‡РЅСѓСЋ! РўР°РєР¶Рµ С‡РµСЂРµР· INSERT-С‚СЂРёРіРіРµСЂ --
 	-- CONSTRAINT Uniq_book UNIQUE (name,genre,publish_year)
 	);
 go
@@ -89,20 +89,20 @@ CREATE TABLE Author (
 	date_of_birth numeric(4) NULL CHECK (date_of_birth<2015),
 	date_of_death numeric(4) NULL, 
 	biography nvarchar(1000) DEFAULT ('Unknown'),
-	-- Реализовать вручную! Также через INSERT-триггер --
+	-- Р РµР°Р»РёР·РѕРІР°С‚СЊ РІСЂСѓС‡РЅСѓСЋ! РўР°РєР¶Рµ С‡РµСЂРµР· INSERT-С‚СЂРёРіРіРµСЂ --
 	-- CONSTRAINT Uniq_author  UNIQUE (surname,name),
 	CONSTRAINT Check_author CHECK (date_of_birth<date_of_death)
 	);
 go
 
 
--- Параметр сервера "lazy schema validation" недоступен в данном выпуске SQL Server.
+-- РџР°СЂР°РјРµС‚СЂ СЃРµСЂРІРµСЂР° "lazy schema validation" РЅРµРґРѕСЃС‚СѓРїРµРЅ РІ РґР°РЅРЅРѕРј РІС‹РїСѓСЃРєРµ SQL Server.
 -- EXEC sp_serveroption 'OtherServer','lazy schema validation', 'true'
 -- go
 
--- 2.Создать необходимые элементы базы данных (представления, триггеры), 
--- обеспечивающие работу с данными связанных таблиц 
--- (выборку, вставку, изменение, удаление). 
+-- 2.РЎРѕР·РґР°С‚СЊ РЅРµРѕР±С…РѕРґРёРјС‹Рµ СЌР»РµРјРµРЅС‚С‹ Р±Р°Р·С‹ РґР°РЅРЅС‹С… (РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ, С‚СЂРёРіРіРµСЂС‹), 
+-- РѕР±РµСЃРїРµС‡РёРІР°СЋС‰РёРµ СЂР°Р±РѕС‚Сѓ СЃ РґР°РЅРЅС‹РјРё СЃРІСЏР·Р°РЅРЅС‹С… С‚Р°Р±Р»РёС† 
+-- (РІС‹Р±РѕСЂРєСѓ, РІСЃС‚Р°РІРєСѓ, РёР·РјРµРЅРµРЅРёРµ, СѓРґР°Р»РµРЅРёРµ). 
 
 if OBJECT_ID(N'AuthorBookView',N'V') is NOT NULL
 	DROP VIEW AuthorBookView;
@@ -129,7 +129,7 @@ AS
 							inserted AS I
 					   WHERE A.name = I.name AND A.surname = I.surname)
 			BEGIN
-				EXEC sp_addmessage 50001, 15,N'Добавление существующего автора!',@lang='us_english',@replace='REPLACE';
+				EXEC sp_addmessage 50001, 15,N'Р”РѕР±Р°РІР»РµРЅРёРµ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµРіРѕ Р°РІС‚РѕСЂР°!',@lang='us_english',@replace='REPLACE';
 				RAISERROR(50001,15,-1)
 			END
 		ELSE
@@ -138,16 +138,16 @@ AS
 							  inserted AS I
 					   WHERE A.author_id = I.author_id)
 				BEGIN
-					EXEC sp_addmessage 50002, 15,N'ID занят! Попробуйте другой',@lang='us_english',@replace='REPLACE';
+					EXEC sp_addmessage 50002, 15,N'ID Р·Р°РЅСЏС‚! РџРѕРїСЂРѕР±СѓР№С‚Рµ РґСЂСѓРіРѕР№',@lang='us_english',@replace='REPLACE';
 					RAISERROR(50002,15,-1)
 				END
 			ELSE
 				INSERT INTO lab15_2.dbo.Author(author_id,surname,name,date_of_birth,date_of_death,biography)
 				SELECT author_id,surname,name,date_of_birth,date_of_death,biography FROM inserted
 		IF (SELECT DISTINCT COUNT(*) FROM inserted) > 1
-			PRINT 'Добавлены новые авторы в таблицу'
+			PRINT 'Р”РѕР±Р°РІР»РµРЅС‹ РЅРѕРІС‹Рµ Р°РІС‚РѕСЂС‹ РІ С‚Р°Р±Р»РёС†Сѓ'
 		ELSE
-			PRINT 'Добавлен новый автор в таблицу'
+			PRINT 'Р”РѕР±Р°РІР»РµРЅ РЅРѕРІС‹Р№ Р°РІС‚РѕСЂ РІ С‚Р°Р±Р»РёС†Сѓ'
 	END
 go
 
@@ -160,7 +160,7 @@ CREATE TRIGGER DeleteAuthor
 	INSTEAD OF DELETE
 AS
 	BEGIN
-		-- Реализация каскадного удаления
+		-- Р РµР°Р»РёР·Р°С†РёСЏ РєР°СЃРєР°РґРЅРѕРіРѕ СѓРґР°Р»РµРЅРёСЏ
 		DELETE B FROM lab15_1.dbo.Book AS B INNER JOIN deleted AS d ON B.author_id = d.author_id
 		DELETE A FROM lab15_2.dbo.Author AS A INNER JOIN deleted AS d ON A.author_id = d.author_id
 	END
@@ -179,7 +179,7 @@ AS
 			OR (UPDATE(date_of_birth) AND EXISTS (SELECT TOP 1 date_of_birth FROM deleted WHERE date_of_birth is not NULL))
 			OR (UPDATE(date_of_death) AND EXISTS (SELECT TOP 1 date_of_death FROM deleted WHERE date_of_death is not NULL)))
 			BEGIN;
-				EXEC sp_addmessage 50003, 15,N'Запрещено изменение данных об авторе экспоната в следствие нарушения целостности! По причине этого, воспользуйтесь созданием нового автора или же удалением существующего',@lang='us_english',@replace='REPLACE';
+				EXEC sp_addmessage 50003, 15,N'Р—Р°РїСЂРµС‰РµРЅРѕ РёР·РјРµРЅРµРЅРёРµ РґР°РЅРЅС‹С… РѕР± Р°РІС‚РѕСЂРµ СЌРєСЃРїРѕРЅР°С‚Р° РІ СЃР»РµРґСЃС‚РІРёРµ РЅР°СЂСѓС€РµРЅРёСЏ С†РµР»РѕСЃС‚РЅРѕСЃС‚Рё! РџРѕ РїСЂРёС‡РёРЅРµ СЌС‚РѕРіРѕ, РІРѕСЃРїРѕР»СЊР·СѓР№С‚РµСЃСЊ СЃРѕР·РґР°РЅРёРµРј РЅРѕРІРѕРіРѕ Р°РІС‚РѕСЂР° РёР»Рё Р¶Рµ СѓРґР°Р»РµРЅРёРµРј СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµРіРѕ',@lang='us_english',@replace='REPLACE';
 				RAISERROR(50003,15,-1)
 			END;
 		ELSE
@@ -198,18 +198,18 @@ AS
 				INNER JOIN deleted B ON A.author_id = B.author_id
 
 				IF UPDATE(date_of_birth)
-					PRINT N'Была добавлена информация о годе рождения'
+					PRINT N'Р‘С‹Р»Р° РґРѕР±Р°РІР»РµРЅР° РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ РіРѕРґРµ СЂРѕР¶РґРµРЅРёСЏ'
 				IF UPDATE(date_of_death) 
-					PRINT N'Была добавлена информация о годе смерти'
+					PRINT N'Р‘С‹Р»Р° РґРѕР±Р°РІР»РµРЅР° РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ РіРѕРґРµ СЃРјРµСЂС‚Рё'
 				IF UPDATE(biography)
-					PRINT N'Была обновлена биография'
+					PRINT N'Р‘С‹Р»Р° РѕР±РЅРѕРІР»РµРЅР° Р±РёРѕРіСЂР°С„РёСЏ'
 
 				DECLARE @number int;
 				SET @number = (SELECT DISTINCT COUNT(*) FROM @temp_table);
 				IF @number > 1
-					PRINT N'у ' + CAST(@number AS VARCHAR(1)) + ' авторов'
+					PRINT N'Сѓ ' + CAST(@number AS VARCHAR(1)) + ' Р°РІС‚РѕСЂРѕРІ'
 				ELSE
-					PRINT N'у 1 автора'
+					PRINT N'Сѓ 1 Р°РІС‚РѕСЂР°'
 		END;
 	END
 go 
@@ -232,7 +232,7 @@ AS
 							inserted AS I
 					   WHERE B.name = I.name AND B.genre = I.genre AND B.publish_year = I.publish_year)
 			BEGIN
-				EXEC sp_addmessage 50004, 15,N'Добавление существующей книги!',@lang='us_english',@replace='REPLACE';
+				EXEC sp_addmessage 50004, 15,N'Р”РѕР±Р°РІР»РµРЅРёРµ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµР№ РєРЅРёРіРё!',@lang='us_english',@replace='REPLACE';
 				RAISERROR(50004,15,-1)
 			END
 		ELSE
@@ -241,7 +241,7 @@ AS
 							  inserted AS I
 					   WHERE B.book_id = I.book_id)
 				BEGIN
-					EXEC sp_addmessage 50002, 15,N'ID занят! Попробуйте другой',@lang='us_english',@replace='REPLACE';
+					EXEC sp_addmessage 50002, 15,N'ID Р·Р°РЅСЏС‚! РџРѕРїСЂРѕР±СѓР№С‚Рµ РґСЂСѓРіРѕР№',@lang='us_english',@replace='REPLACE';
 					RAISERROR(50002,15,-1)
 				END
 			ELSE
@@ -250,7 +250,7 @@ AS
 						   WHERE author_id NOT IN 
 						   (SELECT author_id FROM lab15_2.dbo.Author))
 				BEGIN
-					EXEC sp_addmessage 50005, 15,N'Добавление книги с несуществующим автором! Укажите верный author_id',@lang='us_english',@replace='REPLACE';
+					EXEC sp_addmessage 50005, 15,N'Р”РѕР±Р°РІР»РµРЅРёРµ РєРЅРёРіРё СЃ РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰РёРј Р°РІС‚РѕСЂРѕРј! РЈРєР°Р¶РёС‚Рµ РІРµСЂРЅС‹Р№ author_id',@lang='us_english',@replace='REPLACE';
 					RAISERROR(50005,15,-1)
 				END
 					
@@ -258,9 +258,9 @@ AS
 				INSERT INTO Book(book_id,name,genre,publish_year,cost_of,author_id)
 				SELECT book_id,name,genre,publish_year,cost_of,author_id FROM inserted
 		IF (SELECT DISTINCT COUNT(*) FROM inserted) > 1
-			PRINT 'Добавлены новые книги в таблицу'
+			PRINT 'Р”РѕР±Р°РІР»РµРЅС‹ РЅРѕРІС‹Рµ РєРЅРёРіРё РІ С‚Р°Р±Р»РёС†Сѓ'
 		ELSE
-			PRINT 'Добавлена новая книга в таблицу'
+			PRINT 'Р”РѕР±Р°РІР»РµРЅР° РЅРѕРІР°СЏ РєРЅРёРіР° РІ С‚Р°Р±Р»РёС†Сѓ'
 	END
 go
 
@@ -289,7 +289,7 @@ AS
 
 		IF (UPDATE(book_id) OR UPDATE(name) OR UPDATE(genre) OR UPDATE(publish_year) OR UPDATE(author_id))
 			BEGIN;
-				EXEC sp_addmessage 50003, 15,N'Запрещено изменение данных об книге в следствие нарушения целостности! По причине этого, воспользуйтесь созданием новой книги или же удалением существующего',@lang='us_english',@replace='REPLACE';
+				EXEC sp_addmessage 50003, 15,N'Р—Р°РїСЂРµС‰РµРЅРѕ РёР·РјРµРЅРµРЅРёРµ РґР°РЅРЅС‹С… РѕР± РєРЅРёРіРµ РІ СЃР»РµРґСЃС‚РІРёРµ РЅР°СЂСѓС€РµРЅРёСЏ С†РµР»РѕСЃС‚РЅРѕСЃС‚Рё! РџРѕ РїСЂРёС‡РёРЅРµ СЌС‚РѕРіРѕ, РІРѕСЃРїРѕР»СЊР·СѓР№С‚РµСЃСЊ СЃРѕР·РґР°РЅРёРµРј РЅРѕРІРѕР№ РєРЅРёРіРё РёР»Рё Р¶Рµ СѓРґР°Р»РµРЅРёРµРј СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµРіРѕ',@lang='us_english',@replace='REPLACE';
 				RAISERROR(50003,15,-1)
 			END;
 		ELSE
@@ -308,45 +308,44 @@ AS
 				INNER JOIN deleted B ON A.author_id = B.author_id
 
 				IF UPDATE(cost_of)
-					PRINT N'Была изменена стоимость книги'
+					PRINT N'Р‘С‹Р»Р° РёР·РјРµРЅРµРЅР° СЃС‚РѕРёРјРѕСЃС‚СЊ РєРЅРёРіРё'
 
 				DECLARE @number int;
 				SET @number = (SELECT DISTINCT COUNT(*) FROM @temp_table);
 				IF @number > 1
-					PRINT N'у ' + CAST(@number AS VARCHAR(1)) + ' книги'
+					PRINT N'Сѓ ' + CAST(@number AS VARCHAR(1)) + ' РєРЅРёРіРё'
 				ELSE
-					PRINT N'у 1 книги'
+					PRINT N'Сѓ 1 РєРЅРёРіРё'
 		END;
 	END
 go 
 
 INSERT INTO lab15_2.dbo.Author(author_id,surname,name,date_of_birth,date_of_death)
-VALUES (1,N'Пушкин',N'Александр', 1799, 1837),
-	   (2,N'Верн',N'Жюль',1828, 1905),
-	   (3,N'Кристи',N'Агата',1890,1976),
-	   (4,N'Кинг',N'Стивен', NULL, NULL),
-	   (5,N'Чуковской',N'Корней', 1882, 1969),
-	   (6,N'Леру',N'Гастон', 1868, 1927)
+VALUES (1,N'РџСѓС€РєРёРЅ',N'РђР»РµРєСЃР°РЅРґСЂ', 1799, 1837),
+	   (2,N'Р’РµСЂРЅ',N'Р–СЋР»СЊ',1828, 1905),
+	   (3,N'РљСЂРёСЃС‚Рё',N'РђРіР°С‚Р°',1890,1976),
+	   (4,N'РљРёРЅРі',N'РЎС‚РёРІРµРЅ', NULL, NULL),
+	   (5,N'Р§СѓРєРѕРІСЃРєРѕР№',N'РљРѕСЂРЅРµР№', 1882, 1969),
+	   (6,N'Р›РµСЂСѓ',N'Р“Р°СЃС‚РѕРЅ', 1868, 1927)
 go
 
-UPDATE lab15_2.dbo.Author SET date_of_birth = 1947 WHERE name = N'Стивен'
+UPDATE lab15_2.dbo.Author SET date_of_birth = 1947 WHERE name = N'РЎС‚РёРІРµРЅ'
 go
 
 
 INSERT INTO lab15_1.dbo.Book(book_id,name,genre,publish_year,author_id)
-VALUES (1,N'Евгений Онегин', N'Роман', 1831,1),
-	   (2,N'20 000 льё под водой',N'Научная фантастика', 1916,2),
-	   (3,N'Убийство Роджера Экройда',N'Детектив',1926,3),
-	   (4,N'1408', N'Мистика', 1926,4),
-	   (5,N'Добрый доктор', N'Сказка', 1936,5),
-	   (6,N'Призрак оперы', N'Роман', 1910,6)
+VALUES (1,N'Р•РІРіРµРЅРёР№ РћРЅРµРіРёРЅ', N'Р РѕРјР°РЅ', 1831,1),
+	   (2,N'20 000 Р»СЊС‘ РїРѕРґ РІРѕРґРѕР№',N'РќР°СѓС‡РЅР°СЏ С„Р°РЅС‚Р°СЃС‚РёРєР°', 1916,2),
+	   (3,N'РЈР±РёР№СЃС‚РІРѕ Р РѕРґР¶РµСЂР° Р­РєСЂРѕР№РґР°',N'Р”РµС‚РµРєС‚РёРІ',1926,3),
+	   (4,N'1408', N'РњРёСЃС‚РёРєР°', 1926,4),
+	   (5,N'Р”РѕР±СЂС‹Р№ РґРѕРєС‚РѕСЂ', N'РЎРєР°Р·РєР°', 1936,5),
+	   (6,N'РџСЂРёР·СЂР°Рє РѕРїРµСЂС‹', N'Р РѕРјР°РЅ', 1910,6)
 go
 
-UPDATE lab15_1.dbo.Book SET cost_of = $7.75 WHERE name = N'Призрак оперы'
+UPDATE lab15_1.dbo.Book SET cost_of = $7.75 WHERE name = N'РџСЂРёР·СЂР°Рє РѕРїРµСЂС‹'
 go
 
 SELECT * FROM lab15_2.dbo.Author;
 SELECT * FROM lab15_1.dbo.Book;
 go
-
-DELETE  
+ 
