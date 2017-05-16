@@ -1,0 +1,383 @@
+\documentclass [12pt]{article}
+
+
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc} %Поддержка UTF8
+\usepackage{cmap} % Улучшенный поиск русских слов в полученном pdf-файле
+\usepackage[english,russian]{babel} %Пакет для поддержки русского и английского языка
+\usepackage{graphicx} %Поддержка графиков
+\usepackage{float} %Поддержка float-графиков
+\usepackage[left=20mm,right=15mm, top=20mm,bottom=20mm,bindingoffset=0cm]{geometry}
+\usepackage{mathtools} 
+\usepackage{setspace,amsmath}
+\usepackage{amsmath,amssymb}
+\usepackage{dsfont}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\renewcommand{\baselinestretch}{1.2}
+ 
+\usepackage{color} 
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+\usepackage{listings}
+
+ 
+\lstset{
+	language=Python,
+	basicstyle=\ttm,
+	otherkeywords={self},             % Add keywords here
+	keywordstyle=\ttb\color{deepblue},
+	emph={MyClass,__init__},          % Custom highlighting
+	emphstyle=\ttb\color{deepred},    % Custom highlighting style
+	stringstyle=\color{deepgreen},
+	frame=tb,                         % Any extra options here
+	showstringspaces=false            % 
+}
+ 
+\usepackage{hyperref}
+ 
+\hypersetup{
+    bookmarks=true,         % show bookmarks bar?
+    unicode=false,          % non-Latin characters in Acrobat’s bookmarks
+    pdftoolbar=true,        % show Acrobat’s toolbar?
+    pdfmenubar=true,        % show Acrobat’s menu?
+    pdffitwindow=false,     % window fit to page when opened
+    pdfstartview={FitH},    % fits the width of the page to the window
+    pdftitle={My title},    % title
+    pdfauthor={Author},     % author
+    pdfsubject={Subject},   % subject of the document
+    pdfcreator={Creator},   % creator of the document
+    pdfproducer={Producer}, % producer of the document
+    pdfkeywords={keyword1} {key2} {key3}, % list of keywords
+    pdfnewwindow=true,      % links in new PDF window
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=black,          % color of internal links (change box color with linkbordercolor)
+    citecolor=green,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan           % color of external links
+}
+
+
+\title{}
+\date{}
+\author{}
+
+\begin{document}
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+Федеральное государственное бюджетное образовательное учреждение высшего профессионального образования \\Московский государственный технический университет имени Н.Э. Баумана
+
+\end{center}
+\vfill
+\centerline{\large{Лабораторная работа №1}}
+\centerline{\large{по курсу <<Численные методы>>}}
+\centerline{\large{<<Решение СЛАУ. Метод прогонки>>}}
+\vfill
+\hfill\parbox{5cm} {
+           Выполнил:\\
+           студент группы ИУ9-62 \hfill \\
+           Иванов Георгий\hfill \medskip\\
+           Проверила:\\
+           Домрачева А.Б.\hfill
+       }
+\centerline{Москва, 2017}
+\clearpage
+\end{titlepage}
+
+\textsc{\textbf{Цель:}} 
+
+Анализ метода прогонки и решение СЛАУ с трёхдиагональной матрицей с помощью данного метода.
+
+\textsc{\textbf{Постановка задачи:}}
+
+\textbf{Дано:}  
+$A\overline{x}=\overline{d}$, где $A \in \mathds{R}^{n \times n}$ и $ \overline{x},\overline{d} \in \mathds{R}^{n}$, $A$ - трехдиагональная матрица
+
+\textbf{Найти:}  Решение СЛАУ с помощью метода прогонки, т.е $\overline{x}$ - $?$ при известных $A, \overline{d}$
+
+\textbf{Тестовый пример:} 
+
+В качестве трехдиагональной матрицы $A$  возьмем: 
+$$A = \left(\begin{array}{cccc} 
+4 & 1 & 0 & 0 \\
+1 & 4 & 1 & 0 \\
+0 & 1 & 4 & 1 \\
+0 & 0 & 1 & 4  
+\end{array}\right) $$
+А в качестве вектора $\overline{d}$: 
+$$\overline{d} = \left(\begin{array}{c} 
+5 \\
+6 \\
+6 \\
+5 \\
+\end{array}\right)$$
+
+При этом уравнение примет вид:
+$$ A\overline{x}=\overline{d}
+\quad   \Leftrightarrow \quad
+\left(\begin{array}{cccc} 
+4 & 1 & 0 & 0 \\
+1 & 4 & 1 & 0 \\
+0 & 1 & 4 & 1 \\
+0 & 0 & 1 & 4  
+\end{array}\right)
+\left(\begin{array}{c} 
+x_1 \\
+x_2 \\
+x_3 \\
+x_4 \\
+\end{array}\right)
+ =
+\left(\begin{array}{c} 
+5 \\
+6 \\
+6 \\
+5 \\
+\end{array}\right) $$
+
+\textsc{\textbf{Теоретические сведения:}}
+
+Метод прогонки используется для решения систем линейных уравнений вида $ A\overline{x}=\overline{d}$, где $A$ - трёхдиагональная матрица. Представляет собой вариант метода последовательного исключения неизвестных. Метод прогонки был предложен И. М. Гельфандом и О. В. Локуциевским (в 1952 году; опубликовано в 1960 и 1962 годах), а также независимо другими авторами.
+
+\textbf{Описание алгоритма:}
+
+Пусть массив $a$ - элементы под диагональю, $b$ - на диагонали, $c$ – над диагональю.
+$$\left(\begin{array}{cccccc} 
+b_1 & c_1 & 0 & ... & ... &  0 \\
+a_1 & b_2 & c_2 & ... & ... &  0 \\
+0 & a_2 & b_3 & c_3 & ... &  0 \\
+\vdots & ... & \ddots & \ddots & \ddots &  \vdots \\
+0 & ... & ... & a_{n-2} & b_{n-1} & c_{n-1} \\
+0 & ... & ... & ... & a_{n-1} & b_n \\
+\end{array}\right) $$
+
+\begin{equation*}
+\begin{cases}
+b_1x_1+c_1x_2=d_1\\
+a_1x_1+b_2x_2+c_2x_3=d_2 \\
+… \\
+a_{n-1}x_{n-1}+b_nx_n=d_n 
+\end{cases}
+\end{equation*}
+
+$$ x_1=\frac{d_1-c_1x_2}{b_1} $$
+$$ a_1\frac{d_1-c_1x_2}{b_1} +b_2x_2+c_2x_3=d_2 $$
+$$ x_1= \frac{d_1}{b_1} -\frac{c_1}{b_1}x_2 $$
+
+Вводим замену переменных:
+$$ \alpha_1=\frac{c_1}{b_1},\beta_1=\frac{d_1}{b_1}  $$
+
+Проводим аналогичные действия для остальных  $x_i$, т. о. можно предположить, что решение 
+$$x_{i-1}=\alpha_{i-1}x_i+\beta_{i-1},i=\overline{2,n}$$
+$$x_i=\alpha_ix_{i+1}+\beta_i,i=\overline{n-1,1}$$
+$$a_{i-1}x_{i-1}+b_ix_i+c_ix_{i+1}=d_i$$
+$$(a_{i-1}\alpha_{i-1}+\beta_i)x_i+c_ix_{i+1}=d_i-a_{i-1}\beta_{i-1}$$
+$$x_i=\frac{d_i-a_{i-1}\beta_{i-1}}{a_{i-1}\alpha_{i-1}+ b_i}-\frac{c_i}{a_{i-1}\alpha_{i-1}+b_i)x_{i+1}}$$
+
+Вводим замену:
+$$\alpha_i=-\frac{c_i}{a_{i-1}\alpha_{i-1}+b_i} $$
+$$ \beta_{i} = d_i -\frac{a_{i-1}\beta_{i-1}}{a_{i-1}\alpha_{i-1}+b_i},i=\overline{2,n} $$
+
+Получили  $\alpha_i,\beta_i$, необходимые для решения.
+
+Вычисление $\alpha_i,\beta_i$,$i=\overline{2,n}$ называется прямым ходом метода прогонки, при этом начальные значения $\alpha_1,\beta_1$ вычисляются по формулам:
+$$ \alpha_1=-\frac{c_1}{b_1}, \quad \beta_1=\frac{d_1}{b_1}  $$
+
+
+Соответственно формула: 
+$$a_{n-1}x_{n-1}+b_nx_n=d_n$$
+$$x_n=\frac{d_n-a_{n-1}x_{n-1}}{b_n}$$
+называется обратным ходом метода прогонки.
+
+В качестве начального приближения $x_n$ выбирается значение $\beta_n$ в предположении, что $$a_{n-1}\alpha_{n-1}= 0$$
+
+Необходимое условие метода:
+$$ b_1 \neq 0 $$
+
+Достаточные условия метода:
+\begin{enumerate}
+\item $\abs{b_{i}} \geq \abs{a_{i-1}} + \abs{c_{i}} $, $i=\overline{2,n-1}$ - без него возможно решение, но может и не быть.
+\item $\abs{d_{i}} >\abs{c_{i}} $, $i=\overline{2,n-1}$
+\end{enumerate}
+
+\textbf{Оценка погрешности для решения СЛАУ при отсутствии точного решения:}
+
+Найти приближенный вектор $\overline{x}^*$.
+
+При вычислении $\widetilde{a_{ij}}$ и $\widetilde{d_i}$ с плавающей точкой возникает погрешность:
+\[
+  \begin{array}{l@{\quad}cr@{}l}
+    && A\overline{x}^* & {}= \overline{d}^* \\
+    \text{--} && A\overline{x} & {}= \overline{d} \\ \cline{2-4}
+    && A(\overline{x}^*-\overline{x}) & {}= (\overline{d}^*-\overline{d})
+  \end{array}
+\]
+или:
+$$
+ A\overline{\varepsilon} = \overline{r} \\
+  \quad
+  \Leftrightarrow
+  \quad 
+   \boxed{\overline{\varepsilon} = A^{-1} \overline{r}} 
+$$
+где $ \overline{\varepsilon} $ - вектор ошибки
+
+Тогда исходный вектор $ \overline{x} = \overline{x}^* - \overline{\varepsilon}$.
+\\
+
+\textsc{\textbf{Практическая реализация:}}
+
+Листинг 1. Метод прогонки для решения СЛАУ с трёхдиагональной матрицей
+\begin{lstlisting}[language=python]
+
+#!python -v
+# -*- coding: utf-8 -*-
+
+import numpy
+
+def tridiagonalMatrixAlgorithm(d,c,a,b):
+    alpha = [0]
+    beta = [0]
+    n = len(b)
+
+    for i in range(1,n-1):
+        if i == 1:
+            alpha.append(-c[i]/d[i])
+            beta.append(b[i]/d[i])
+        else:
+            alpha.append(-c[i]/(d[i]+alpha[i-1]*a[i-1]))
+            beta.append((b[i]-a[i-1]*beta[i-1])/(d[i]+alpha[i-1]*a[i-1]))
+
+    x = [0 for _ in range(n)]
+    n -= 1
+    x[n] = (b[n]-a[n-1]*beta[n-1])/(d[n]+a[n-1]*alpha[n-1])
+    for i in range(n-1,0,-1):
+        x[i]=x[i+1]*alpha[i]+beta[i]
+    return x[1:]
+
+def init_array(matrix,bb):
+    a, b, d, c = [0], [0], [0], [0]
+    d.extend([matrix[i][i] for i in range(len(matrix[0]))])
+    c.extend([matrix[i][i + 1] for i in range(len(matrix[0]) - 1)])
+    a.extend([matrix[i + 1][i] for i in range(len(matrix[0]) - 1)])
+    b.extend(bb)
+    return a,b,c,d
+
+def valueB(matrix,x):
+    b = [0 for _ in range(len(x))]
+    for j in range(len(matrix)):
+        b[j] = sum(matrix[j][i] * x[i] for i in range(len(matrix[j])))
+    return b
+
+def find_error(matrix,d1,d2,x2):
+    r = [d2[i] - d1[i] for i in range(len(matrix))]
+    matrix_rev = numpy.matrix(matrix).I
+    matrix_rev = matrix_rev.tolist()
+
+    e = [0 for _ in range(0, len(d1))]
+    for j in range(0, len(matrix_rev)):
+        e[j] = sum(matrix_rev[j][i] * r[i] for i in range(len(matrix_rev[j])))
+
+    x = [x2[i] - e[i] for i in range(0, len(matrix_rev))]
+    return x,e[0:4]
+
+if __name__=="__main__":
+    matrix = [[1,2,0,0],
+              [2,-1,-1,0],
+              [0,1,-1,1],
+              [0,0,1,1]]
+    D = [5,-3,3,7]
+    a,b,c,d = init_array(matrix,D)
+    x = tridiagonalMatrixAlgorithm(d,c,a,b)
+    print(x)
+    D_ = valueB(matrix,x)
+    print(D_)
+    x_real,error = find_error(matrix,D,D_,x)
+    print(error)
+    print(x_real)
+
+
+\end{lstlisting}
+
+\textsc{\textbf{Результаты:}}
+
+Для тестирования полученной программы было выбрано в качестве трехдиагональной матрицы $A$: 
+$$A = \left(\begin{array}{cccc} 
+4 & 1 & 0 & 0 \\
+1 & 4 & 1 & 0 \\
+0 & 1 & 4 & 1 \\
+0 & 0 & 1 & 4  
+\end{array}\right) $$
+В качестве вектора $\overline{d}$: 
+$$\overline{d} = \left(\begin{array}{c} 
+5 \\
+6 \\
+6 \\
+5 \\
+\end{array}\right)$$
+В результате работы программы (Листинг 1) получаем значения:
+
+$$\overline{\varepsilon} = \left(\begin{array}{c} 
+0 \\
+0 \\
+0 \\
+0 \\
+\end{array}\right), \quad \overline{x} = \left(\begin{array}{c} 
+1 \\
+1 \\
+1 \\
+1 \\
+\end{array}\right)$$
+
+Как видно выше, не всегда вектор $\overline{\varepsilon}$ может содержать погрешность (нулевой вектор ошибок). Поэтому чтобы вектор ошибок не был ненулевым, протестируем нашу программу на других входных данных, где: 
+$$ A = 
+\left(\begin{array}{cccc} 
+1 & 2 & 0 & 0 \\
+2 & -1 & -1 & 0 \\
+0 & 1 & -1 & 1 \\
+0 & 0 & 1 & 1  
+\end{array}\right), \quad \overline{d}
+ =
+ \left(\begin{array}{c} 
+5 \\
+-3 \\
+3 \\
+7 \\
+\end{array}\right)
+$$
+
+В результате работы программы (Листинг 1) получаем значения:
+
+$$
+\overline{\varepsilon} = 
+\left(\begin{array}{c} 
+8.074349270001139e^{-17}\\
+-4.0371746350005693e^{-17}\\
+2.0185873175002846e^{-16} \\
+-2.0185873175002846e^{-16} \\
+\end{array}\right)
+\quad
+\overline{x} =
+ \left(\begin{array}{c} 
+0.9999999999999999 \\
+2.0 \\
+3.0 \\
+3.9999999999999996 \\
+\end{array}\right)
+$$
+
+
+\textbf{Выводы:}
+
+В ходе выполнения лабораторной работы был рассмотрен метод решения СЛАУ с трёхдиагональной матрицей: метод прогонки, так же для метода была написана реализация на языке программирования Python.
+
+Для метода прогонки можно отметить то, что отсутствует методологическая (логическая) погрешность, но присутствует вычислительная погрешность в связи с использованием чисел с плавающей запятой (нахождение обратной матрицы $A^{-1}$) , ведущая к высокому накоплению вычислительной ошибки.
+
+
+\end{document}  
