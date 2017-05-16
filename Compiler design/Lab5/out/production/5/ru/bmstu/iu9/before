@@ -1,0 +1,23 @@
+static Matcher m;
+
+String ident = "[A-Za-z][\\dA-Za-z]*";
+String keywords = "get|set";
+String operation = "||";
+String operation2 = "+";
+String whitespace = "[\\t\\n\\s]";
+String digit = "[0-9]+";
+String comment = "|+[^|+]*+|";
+
+String whitespace = "[\\t\\n\\s\\w\\ ]";
+String keywords = "[sget]";
+String operation = "[\\|\\+]";
+String digit = "[0-9]";
+String letter = "[A-Za-dfh-ru-z]";
+
+String pattern = "(" + whitespace + ")|(" +
+                        digit + ")|(" +
+                        keywords + ")|(" +
+                        operation + ")|(" +
+                        letter + ")";
+
+Pattern p = Pattern.compile(pattern);

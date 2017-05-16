@@ -1,0 +1,158 @@
+2
+     0  *ast.File {
+     1  .  Doc: nil
+     2  .  Package: test.go:1:1
+     3  .  Name: *ast.Ident {
+     4  .  .  NamePos: test.go:1:9
+     5  .  .  Name: "main"
+     6  .  .  Obj: nil
+     7  .  }
+     8  .  Decls: []ast.Decl (len = 2) {
+     9  .  .  0: *ast.FuncDecl {
+    10  .  .  .  Doc: nil
+    11  .  .  .  Recv: nil
+    12  .  .  .  Name: *ast.Ident {
+    13  .  .  .  .  NamePos: test.go:3:6
+    14  .  .  .  .  Name: "hello"
+    15  .  .  .  .  Obj: *ast.Object {
+    16  .  .  .  .  .  Kind: func
+    17  .  .  .  .  .  Name: "hello"
+    18  .  .  .  .  .  Decl: *(obj @ 9)
+    19  .  .  .  .  .  Data: nil
+    20  .  .  .  .  .  Type: nil
+    21  .  .  .  .  }
+    22  .  .  .  }
+    23  .  .  .  Type: *ast.FuncType {
+    24  .  .  .  .  Func: test.go:3:1
+    25  .  .  .  .  Params: *ast.FieldList {
+    26  .  .  .  .  .  Opening: test.go:3:11
+    27  .  .  .  .  .  List: nil
+    28  .  .  .  .  .  Closing: test.go:3:12
+    29  .  .  .  .  }
+    30  .  .  .  .  Results: *ast.FieldList {
+    31  .  .  .  .  .  Opening: -
+    32  .  .  .  .  .  List: []*ast.Field (len = 1) {
+    33  .  .  .  .  .  .  0: *ast.Field {
+    34  .  .  .  .  .  .  .  Doc: nil
+    35  .  .  .  .  .  .  .  Names: nil
+    36  .  .  .  .  .  .  .  Type: *ast.Ident {
+    37  .  .  .  .  .  .  .  .  NamePos: test.go:3:14
+    38  .  .  .  .  .  .  .  .  Name: "string"
+    39  .  .  .  .  .  .  .  .  Obj: nil
+    40  .  .  .  .  .  .  .  }
+    41  .  .  .  .  .  .  .  Tag: nil
+    42  .  .  .  .  .  .  .  Comment: nil
+    43  .  .  .  .  .  .  }
+    44  .  .  .  .  .  }
+    45  .  .  .  .  .  Closing: -
+    46  .  .  .  .  }
+    47  .  .  .  }
+    48  .  .  .  Body: *ast.BlockStmt {
+    49  .  .  .  .  Lbrace: test.go:3:21
+    50  .  .  .  .  List: []ast.Stmt (len = 2) {
+    51  .  .  .  .  .  0: *ast.AssignStmt {
+    52  .  .  .  .  .  .  Lhs: []ast.Expr (len = 1) {
+    53  .  .  .  .  .  .  .  0: *ast.Ident {
+    54  .  .  .  .  .  .  .  .  NamePos: test.go:4:2
+    55  .  .  .  .  .  .  .  .  Name: "str"
+    56  .  .  .  .  .  .  .  .  Obj: *ast.Object {
+    57  .  .  .  .  .  .  .  .  .  Kind: var
+    58  .  .  .  .  .  .  .  .  .  Name: "str"
+    59  .  .  .  .  .  .  .  .  .  Decl: *(obj @ 51)
+    60  .  .  .  .  .  .  .  .  .  Data: nil
+    61  .  .  .  .  .  .  .  .  .  Type: nil
+    62  .  .  .  .  .  .  .  .  }
+    63  .  .  .  .  .  .  .  }
+    64  .  .  .  .  .  .  }
+    65  .  .  .  .  .  .  TokPos: test.go:4:6
+    66  .  .  .  .  .  .  Tok: :=
+    67  .  .  .  .  .  .  Rhs: []ast.Expr (len = 1) {
+    68  .  .  .  .  .  .  .  0: *ast.BasicLit {
+    69  .  .  .  .  .  .  .  .  ValuePos: test.go:4:9
+    70  .  .  .  .  .  .  .  .  Kind: STRING
+    71  .  .  .  .  .  .  .  .  Value: "\"Goodbay!\""
+    72  .  .  .  .  .  .  .  }
+    73  .  .  .  .  .  .  }
+    74  .  .  .  .  .  }
+    75  .  .  .  .  .  1: *ast.ReturnStmt {
+    76  .  .  .  .  .  .  Return: test.go:5:2
+    77  .  .  .  .  .  .  Results: []ast.Expr (len = 1) {
+    78  .  .  .  .  .  .  .  0: *ast.Ident {
+    79  .  .  .  .  .  .  .  .  NamePos: test.go:5:9
+    80  .  .  .  .  .  .  .  .  Name: "str"
+    81  .  .  .  .  .  .  .  .  Obj: *(obj @ 56)
+    82  .  .  .  .  .  .  .  }
+    83  .  .  .  .  .  .  }
+    84  .  .  .  .  .  }
+    85  .  .  .  .  }
+    86  .  .  .  .  Rbrace: test.go:6:1
+    87  .  .  .  }
+    88  .  .  }
+    89  .  .  1: *ast.FuncDecl {
+    90  .  .  .  Doc: nil
+    91  .  .  .  Recv: nil
+    92  .  .  .  Name: *ast.Ident {
+    93  .  .  .  .  NamePos: test.go:8:6
+    94  .  .  .  .  Name: "main"
+    95  .  .  .  .  Obj: *ast.Object {
+    96  .  .  .  .  .  Kind: func
+    97  .  .  .  .  .  Name: "main"
+    98  .  .  .  .  .  Decl: *(obj @ 89)
+    99  .  .  .  .  .  Data: nil
+   100  .  .  .  .  .  Type: nil
+   101  .  .  .  .  }
+   102  .  .  .  }
+   103  .  .  .  Type: *ast.FuncType {
+   104  .  .  .  .  Func: test.go:8:1
+   105  .  .  .  .  Params: *ast.FieldList {
+   106  .  .  .  .  .  Opening: test.go:8:10
+   107  .  .  .  .  .  List: nil
+   108  .  .  .  .  .  Closing: test.go:8:11
+   109  .  .  .  .  }
+   110  .  .  .  .  Results: nil
+   111  .  .  .  }
+   112  .  .  .  Body: *ast.BlockStmt {
+   113  .  .  .  .  Lbrace: test.go:8:13
+   114  .  .  .  .  List: []ast.Stmt (len = 1) {
+   115  .  .  .  .  .  0: *ast.AssignStmt {
+   116  .  .  .  .  .  .  Lhs: []ast.Expr (len = 1) {
+   117  .  .  .  .  .  .  .  0: *ast.Ident {
+   118  .  .  .  .  .  .  .  .  NamePos: test.go:9:2
+   119  .  .  .  .  .  .  .  .  Name: "x"
+   120  .  .  .  .  .  .  .  .  Obj: *ast.Object {
+   121  .  .  .  .  .  .  .  .  .  Kind: var
+   122  .  .  .  .  .  .  .  .  .  Name: "x"
+   123  .  .  .  .  .  .  .  .  .  Decl: *(obj @ 115)
+   124  .  .  .  .  .  .  .  .  .  Data: nil
+   125  .  .  .  .  .  .  .  .  .  Type: nil
+   126  .  .  .  .  .  .  .  .  }
+   127  .  .  .  .  .  .  .  }
+   128  .  .  .  .  .  .  }
+   129  .  .  .  .  .  .  TokPos: test.go:9:4
+   130  .  .  .  .  .  .  Tok: :=
+   131  .  .  .  .  .  .  Rhs: []ast.Expr (len = 1) {
+   132  .  .  .  .  .  .  .  0: *ast.BasicLit {
+   133  .  .  .  .  .  .  .  .  ValuePos: test.go:9:7
+   134  .  .  .  .  .  .  .  .  Kind: STRING
+   135  .  .  .  .  .  .  .  .  Value: "\"Hello World\""
+   136  .  .  .  .  .  .  .  }
+   137  .  .  .  .  .  .  }
+   138  .  .  .  .  .  }
+   139  .  .  .  .  }
+   140  .  .  .  .  Rbrace: test.go:10:1
+   141  .  .  .  }
+   142  .  .  }
+   143  .  }
+   144  .  Scope: *ast.Scope {
+   145  .  .  Outer: nil
+   146  .  .  Objects: map[string]*ast.Object (len = 2) {
+   147  .  .  .  "hello": *(obj @ 15)
+   148  .  .  .  "main": *(obj @ 95)
+   149  .  .  }
+   150  .  }
+   151  .  Imports: nil
+   152  .  Unresolved: []*ast.Ident (len = 1) {
+   153  .  .  0: *(obj @ 36)
+   154  .  }
+   155  .  Comments: nil
+   156  }
