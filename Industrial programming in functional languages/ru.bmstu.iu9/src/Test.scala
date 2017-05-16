@@ -2,7 +2,7 @@
   * Created by runnerpeople on 11.03.2017.
   */
 
-object Lab1 {
+object Test {
 
   val zipP: (List[Int], List[Int], (Int, Int) => Boolean) => List[(Int, Int)] = {
     case (Nil, Nil, pred) => Nil

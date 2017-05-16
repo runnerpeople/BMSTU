@@ -53,7 +53,7 @@ trait Whitespaces extends Scanner {
    }
 }
 
-/* trait Idents extends Scanner {
+trait Idents extends Scanner {
     private def scanIdent(pos : Pos,flag: Boolean) : (Pos,Boolean) = {
         (pos,flag) match {
           case (c,d) if c.ch >= '0' && c.ch <= '9'                                               => scanIdent(pos.inc, d)
@@ -139,146 +139,6 @@ trait Unknown extends Scanner {
   }
 } */
 
-
-trait Idents extends Scanner {
-  private def scanIdent(pos : Pos,flag: Boolean) : (Pos,Boolean) = {
-    (pos,flag) match {
-      case (c,d) if (c.ch >= '0' && c.ch <= '9')  || (Character.toLowerCase(c.ch) >= 'a' && Character.toLowerCase(c.ch) <= 'z') => scanIdent(pos.inc, true)
-      case (c,d)                                                                                                                => (c,d)
-    }
-  }
-
-  override def scan(start: Pos, errors: List[String]) = {
-    val checkIsIdent = ("stv" contains start.ch) && (start.inc.ch == '.')
-    if (checkIsIdent) {
-      val follow = scanIdent(start.inc.inc, false)
-      if (follow._1.toString.equals(start.inc.inc.toString)) {
-          val add_error = "error in ident (null) at " + start :: errors
-          (IDENT,follow._1,add_error)
-      }
-      else {
-        if (follow._2 && (" \t\n" contains follow._1.ch) || (follow._1.ch == -1)) {
-           (IDENT, follow._1, errors)
-        }
-        else {
-            val add_error = "error in ident at " + start :: errors
-            (IDENT, follow._1, add_error)
-        }
-      }
-    }
-    else {
-        super.scan(start, errors)
-    }
-  }
-}
-
-trait Numbers extends Scanner {
-  private def scanNumber(pos : Pos,flag: Boolean) : (Pos,Boolean) = {
-    (pos,flag) match {
-      case (c,d) if c.ch >= '0' && c.ch <= '9'    => scanNumber(pos.inc, true)
-      case (c,d)                                  => (c,d)
-    }
-  }
-
-  override def scan(start: Pos,errors:List[String]) = {
-    val follow = scanNumber(start,false)
-    if (follow._1 == start || !follow._2) super.scan(start,errors)
-    else {
-      if (follow._2 && (" \t\n" contains follow._1.ch) || (follow._1.ch == -1)) (NUMBER, follow._1, errors)
-      else {
-        val add_error = "error in number at " + start :: errors
-        (NUMBER, follow._1, add_error)
-      }
-    }
-  }
-}
-
-trait Comments extends Scanner {
-  private def scanComment(pos : Pos,flag: Boolean) : (Pos,Boolean) = {
-    (pos,flag) match {
-      case (c,d) if (c.ch == '\n') || (c.ch == -1)   => (c,d)
-      case (c,d)                                     => scanComment(pos.inc,d)
-    }
-  }
-
-  override def scan(start: Pos,errors:List[String]) = {
-    val checkComment = (start.col == 1) && (start.ch == '*')
-    if (checkComment) {
-      val follow = scanComment(start.inc, false)
-      (COMMENT,follow._1,errors)
-    }
-    else {
-       super.scan(start, errors)
-    }
-  }
-}
-
-trait Strings extends Scanner {
-  private def scanString(pos : Pos,flag: Boolean) : (Pos,Boolean) = {
-    (pos,flag) match {
-      case (c,d) if ("\n \t"  contains c.ch) || (c.ch == -1)                                          => (c,false)
-      case (c,d) if (c.ch == '\'') && (("\n \t"  contains c.inc.ch) || (c.inc.ch == -1))              => (c.inc.inc,true)
-      case (c,d) if (c.ch == '\'') && (c.inc.ch == '\'')                                              => scanString(c.inc.inc,d)
-      case (c,d) if (c.ch == '\'')                                                                    => (c.inc,false)
-      case (c,d)                                                                                      => scanString(c.inc,d)
-    }
-  }
-
-  override def scan(start: Pos, errors: List[String]) = {
-    val checkStr = start.ch == '\''
-    if (checkStr) {
-      val follow = scanString(start.inc,true)
-      if (follow._2) (STRING, follow._1,errors)
-      else {
-        val add_error = "syntax error in string literals at " + start :: errors
-        (STRING, follow._1,add_error)
-      }
-    }
-    else super.scan(start,errors)
-  }
-}
-
-trait KeyWords extends Scanner {
-
-  private def getPos(pos: Pos,offs: Int): (Pos) = {
-    (pos,offs) match {
-      case (c,0) => c
-      case (c,d) => getPos(pos.inc,d-1)
-    }
-  }
-
-  override def scan(start: Pos, errors: List[String]) = {
-    val checkKeyword = start.ch == '$'
-    if (checkKeyword) {
-      try {
-        val image = start.prog.substring(start.inc.offs, getPos(start.inc, 5).offs)
-        if (image.equals("ENTRY"))
-           (KEYWORD, getPos(start.inc, 5), errors)
-        else if (image.equals("EXTER") && getPos(start.inc,5).ch == 'N')
-          (KEYWORD, getPos(start.inc, 6), errors)
-        else {
-          val add_error = "unknown keyword at " + start :: errors
-          (KEYWORD, start.inc, add_error)
-        }
-      }
-      catch {
-        case unknown => val add_error = "unknown keyword at " + start :: errors;
-                        (KEYWORD, start, add_error)
-      }
-    }
-    else super.scan(start,errors)
-  }
-}
-
-trait Unknown extends Scanner {
-  override def scan(start: Pos, errors: List[String]) = {
-    val add_error = "Unknown token at " + start + ": " + start.prog(start.offs) :: errors
-    (UNKNOWN, start.inc,add_error)
-  }
-}
-
-
-
 class Lab3 {}
 
 object Lab3 {
@@ -293,8 +153,6 @@ object Lab3 {
           with Strings
           with Idents
           with Numbers
-          with Comments
-          with KeyWords
           with Whitespaces
       )
       while (t.tag != END_OF_PROGRAM) {
