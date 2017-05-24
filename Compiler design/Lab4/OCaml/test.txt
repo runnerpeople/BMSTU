@@ -1,0 +1,8 @@
+:label "word a b c" ::comment
+next:y :. "jkkmh
+"
+
+:LOOP
+  set X=124
+  if {X}=={231} goto EOF
+goto LOOP
