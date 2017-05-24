@@ -17,7 +17,7 @@ class compiler = object (self)
         end
 
     method errors =
-        BatList.is_empty messages
+        not (BatList.is_empty messages)
 
     method get_name code =
         BatList.at names code
@@ -26,7 +26,7 @@ class compiler = object (self)
         messages <- messages@[new Message.message is_err text pos]
 
     method output_messages =
-        BatList.iter (fun m -> Printf.printf "%s %s %s" (if m#get_error then "Error" else "Warning") m#get_position#to_string m#get_text) messages
+        BatList.iter (fun m -> Printf.printf "%s: %s %s" (if m#get_error then "Error" else "Warning") m#get_position#to_string m#get_text) messages
 
     (* method get_scanner (program: BatUTF8.t) = 
         new Scanner.scanner program self *)

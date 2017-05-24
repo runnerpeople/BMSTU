@@ -9,6 +9,7 @@ type pos = {
 }
 
 let init_pos str = {text = str; line = BatInt.one; pos = BatInt.one;index = BatInt.zero;}
+let create_pos str l p ind = {text = str; line = l; pos = p;index = ind;}
 
 class position init = object (self)
     val mutable cur : pos = init
@@ -18,9 +19,13 @@ class position init = object (self)
     method get_pos = cur.pos
     method get_index = cur.index
 
+    method set_line l = cur.line <- l
+    method set_pos p = cur.pos <- p
+    method set_index i = cur.index <- i
+
     method to_string = "(" ^ (BatInt.to_string(cur.line)) ^ " ," ^ (BatInt.to_string(cur.pos)) ^ ")"
 
-    method is_eof = cur.index == BatUTF8.length(cur.text)
+    method is_eof = cur.index == BatString.length(cur.text)
     method get_code =
         match self#is_eof with
           | false ->  BatChar.code(cur.text.[cur.index])
@@ -40,20 +45,23 @@ class position init = object (self)
 		    cur.text.[cur.index] == '\n' 
 
    
-    method next = 
-        if not self#is_eof then (
-			if self#is_newline then (
-				if cur.text.[cur.index] == '\r' then
-					cur.index <- cur.index+1;
-				cur.line <- cur.line + 1;
-				cur.pos <- 1;
+    method next =
+        let new_pos = ref (create_pos cur.text cur.line cur.pos cur.index) in
+        let p = ref (new position !new_pos) in 
+        if not (!p#is_eof) then (
+			if !p#is_newline then (
+				if !p#get_text.[!p#get_index] == '\r' then
+					!p#set_index (!p#get_index+1);
+				!p#set_line (!p#get_line + 1);
+				!p#set_pos 1;
             )
 			else (
-                if not (BatUChar.is_ascii(BatUTF8.look cur.text cur.index)) then
-                    cur.index <- cur.index+1;
-                cur.pos <- cur.pos+1;	
+                if not (BatUChar.is_ascii(BatUTF8.look !p#get_text !p#get_index)) then
+                    !p#set_index (!p#get_index+1);
+                !p#set_pos (!p#get_pos+1);	
             );
+            !p#set_index (!p#get_index+1);
         ); 
-        self
+        !p
     end;;
 

@@ -11,6 +11,6 @@ class token start follow valuee = object inherit Token.token Label start follow
     method coords = coords
 
     method to_string = 
-        "Label " ^ coords#to_string ^ ": " ^ value
+        "LABEL " ^ coords#to_string ^ ": " ^ value
 
     end;;

@@ -7,10 +7,13 @@ class scanner programm compileer = object (self)
     val program: BatUTF8.t = programm
     val compiler: Compiler.compiler = compileer
     val mutable cur: Position.position = new Position.position (Position.init_pos programm)
+
+    method cur = cur
   
 
     method read_comment (pos : Position.position) =
-        let p = ref pos#next#next in
+        let new_pos = ref (Position.create_pos pos#get_text pos#get_line pos#get_pos pos#get_index) in
+        let p = ref (new Position.position !new_pos)#next#next in
         let s = ref "" in
         while (not !p#is_newline) do
             s := !s ^ BatChar.escaped (BatChar.chr !p#get_code);
@@ -19,54 +22,62 @@ class scanner programm compileer = object (self)
         new CommentToken.token cur !p#next !s
 
     method read_label (pos : Position.position) =
-        let p = ref pos#next in
+        let new_pos = ref (Position.create_pos pos#get_text pos#get_line pos#get_pos pos#get_index) in
+        let p = ref (new Position.position !new_pos)#next in
         let s = ref "" in
         if (!p#is_decimaldigit || !p#is_letter) then (
             while (!p#is_decimaldigit || !p#is_letter) do
                 s := !s ^ BatChar.escaped (BatChar.chr !p#get_code);
                 p := !p#next;
             done;
-            new LabelToken.token cur !p#next !s
+            new LabelToken.token cur !p#next !s;
         )
         else (
-            compiler#add_message false !p "Label must start only with numbers or letters";
+            compiler#add_message false !p "Label must start only with numbers or letters\n";
             new UnknownToken.token Unknown cur !p#next !s;
         );
 
     method read_word (pos : Position.position) (flag: bool) =
-        if (flag) then (
-            let p = ref pos#next in
+        if (not flag) then (
+            let new_pos = ref (Position.create_pos pos#get_text pos#get_line pos#get_pos pos#get_index) in
+            let p = ref (new Position.position !new_pos)#next in
             let s = ref "" in
-            s := !s ^ BatChar.escaped (BatChar.chr !p#get_code);
+            s := !s ^ BatChar.escaped (BatChar.chr pos#get_code);
             while (not !p#is_eof && not !p#is_whitespace) do
                 s := !s ^ BatChar.escaped (BatChar.chr !p#get_code);
                 p := !p#next;
             done;
-            new WordToken.token cur !p#next !s
+            new WordToken.token cur !p !s
         )
         else (
-            let p = ref pos#next in
+            let new_pos = ref (Position.create_pos pos#get_text pos#get_line pos#get_pos pos#get_index) in
+            let p = ref (new Position.position !new_pos)#next in
             let s = ref "" in
-            while (not !p#is_eof && (BatChar.chr !p#get_code == '\"') && (BatChar.chr !p#get_code == '\r') && (BatChar.chr !p#get_code == '\n')) do
+            while (not !p#is_eof && (BatChar.chr !p#get_code != '\"') && (BatChar.chr !p#get_code != '\r') && (BatChar.chr !p#get_code != '\n')) do
                 s := !s ^ BatChar.escaped (BatChar.chr !p#get_code);
                 p := !p#next;
             done;
             if (BatChar.chr !p#get_code == '\"') then
                 new WordToken.token cur !p#next !s
+            else if (!p#is_eof) then begin
+                compiler#add_message false !p "end of program found, \" expected\n";
+                new UnknownToken.token Unknown cur !p !s
+            end
             else if ((BatChar.chr !p#get_code == '\r') || (BatChar.chr !p#get_code == '\n')) then begin
-                compiler#add_message false !p "Words don't contains whitespaces, \" expected";
+                compiler#add_message false !p "Words don't contains whitespaces, \" expected\n";
                 new UnknownToken.token Unknown cur !p !s
             end
-            else begin
-                compiler#add_message false !p "end of program found, \" expected";
+            (* this isn't necessary, but compiler uses automatic type deduction, so you must have 'else' - statement *)
+            else 
                 new UnknownToken.token Unknown cur !p !s
-            end
         );
    
     method next_token =
         let tok = ref (new UnknownToken.token Unknown cur cur "") in
-        while !tok#tag != End_of_program do
-            while not cur#is_eof do
+        while !tok#tag == Unknown do
+            if cur#is_eof then
+                tok := (new UnknownToken.token End_of_program cur cur "")
+            else begin
                 while cur#is_whitespace do
                     cur <- cur#next
                 done;
@@ -76,18 +87,16 @@ class scanner programm compileer = object (self)
                         | ':'                                             -> self#read_label cur
                         | '\"'                                            -> self#read_word cur true
                         | _                                               -> self#read_word cur false
-                in
-                if (token#tag == Unknown) then begin
-                    compiler#add_message true cur "Token: unrecognized token";
-                    cur <- cur#next;
-                end
-                else begin
-                    cur <- token#coords#following;
-                    tok := (token :> Token.token);                
-                end 
-            done;
-            if cur#is_eof then
-                tok := (new UnknownToken.token End_of_program cur cur "");
+                    in
+                    if (token#tag == Unknown) then begin
+                        compiler#add_message true cur "Token: unrecognized token\n";
+                        cur <- cur#next;
+                    end
+                    else begin
+                        cur <- token#coords#following;
+                        tok := (token :> Token.token);               
+                    end;
+            end
         done;
         !tok
     end;;

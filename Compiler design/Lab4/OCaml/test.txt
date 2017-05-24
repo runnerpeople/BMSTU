@@ -1,4 +1,4 @@
-:label "word a b c" ::comment
+"word a b c" ::comment
 next:y :. "jkkmh
 "
 
