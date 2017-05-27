@@ -1,0 +1,10 @@
+a = 3
+i = 0
+for i = 1,5 in 
+if (i) then
+a = a + 2
+else 
+a = a + 1
+a
+;
+
