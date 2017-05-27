@@ -2,7 +2,6 @@
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Module.h"
-//#include "llvm/IR/Verifier.h"
 
 #include <cstdio>
 #include <cstdlib>
@@ -269,8 +268,6 @@ static ExprAST* ParsePrimary() {
             return ParseIfExpr();
         case tok_for:
             return ParseForExpr();
-        case ';':
-            return nullptr;
         default: {
             LogError("unknown token when expecting an expression");
             return nullptr;
@@ -507,7 +504,7 @@ int main() {
     MainFunction = TheModule->getFunction("main");
 
     llvm::FunctionType *FT =
-            llvm::FunctionType::get(llvm::Type::getInt32Ty(llvm::getGlobalContext()),false);
+            llvm::FunctionType::get(Builder.getInt32Ty(),false);
     MainFunction =
             llvm::Function::Create(FT, llvm::GlobalValue::CommonLinkage, "main", TheModule);
 
@@ -516,6 +513,7 @@ int main() {
 
     llvm::Value *ret = Parse();
     Builder.CreateRet(ret);
+
 
     // Выводим сгенерированный код.
     TheModule->dump();
