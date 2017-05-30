@@ -75,12 +75,12 @@ class scanner programm compileer = object (self)
     method next_token =
         let tok = ref (new UnknownToken.token Unknown cur cur "") in
         while !tok#tag == Unknown do
+            while cur#is_whitespace do
+                cur <- cur#next
+            done;
             if cur#is_eof then
                 tok := (new UnknownToken.token End_of_program cur cur "")
             else begin
-                while cur#is_whitespace do
-                    cur <- cur#next
-                done;
                 let token =
                     match BatChar.chr cur#get_code with
                         | ':' when cur#next#get_code == BatChar.code(':') -> self#read_comment cur 
@@ -100,5 +100,3 @@ class scanner programm compileer = object (self)
         done;
         !tok
     end;;
-
-
