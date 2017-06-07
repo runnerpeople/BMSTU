@@ -1,0 +1,5 @@
+T ( Opt "Term" "Symbol" { "Symbol" } "nl" )
+Opt ( "Hello" , "lol" )
+S ( N , "(" )
+N ( R , ")" )
+R ( "[" "]" )
