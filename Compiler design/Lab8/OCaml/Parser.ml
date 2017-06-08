@@ -27,6 +27,7 @@ class parser tokens_list = object (self)
     method rules_to_string =
         BatHashtbl.iter (fun key value -> Batteries.Printf.printf "%s %s\n" key value#to_string) map_rule
 
+    (* Rp = NonTerm | Term | "{" Rp { Rp } "}" | Alt *)
     method parse_rp (cur_rule : Rule.rule) =
         let ret_rule = ref cur_rule in
         if token#tag == NonTerm then begin
@@ -62,7 +63,7 @@ class parser tokens_list = object (self)
         end;
         !ret_rule
 
-
+    (* Alt = "(" Rp { Rp } { "," Rp { Rp } } ")" *)
     method parse_alt (cur_rule : Rule.rule) = 
         if token#tag == Special && (BatUTF8.compare token#value "(") == 0 then begin 
             let sub_rule = ref (new Rule.rule Error) in
@@ -123,6 +124,7 @@ class parser tokens_list = object (self)
             new Rule.rule Error;
         end
 
+    (* Expr = NonTerm Alt *)
     method parse_expr =
         if token#tag == NonTerm then begin
             nterms_left <- BatSet.add token#value nterms_left;
@@ -138,7 +140,7 @@ class parser tokens_list = object (self)
             Batteries.Printf.eprintf "Error. Expected Token \"NonTerm\"\n";
         end
                 
-
+    (* Exprs = Expr { Expr } *)
     method parse_exprs =
         self#parse_expr;
         while token#tag == NonTerm do

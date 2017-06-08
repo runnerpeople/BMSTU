@@ -6,30 +6,38 @@ class algorithm map_rule = object (self)
     val mutable map_rule: (BatUTF8.t, Rule.rule) BatHashtbl.t = map_rule
     val mutable map_first: (BatUTF8.t, BatUTF8.t BatSet.t) BatHashtbl.t = Hashtbl.create 1000;
 
+    (* method debug set =
+        BatSet.iter (fun elem -> (Printf.printf "%s " elem)) set;
+        print_string "\n" *)
+
     method f (rule : Rule.rule) =
         let set = ref BatSet.empty in
         BatList.iter (fun lst -> 
                 let alt_set = ref BatSet.empty in
                 let hs = ref BatSet.empty in
-                let flag = ref true in
+                alt_set := BatSet.add "ε" !alt_set;
                 (
                 BatList.iter (fun el -> (
-                    if !flag then begin
-                        if el#tag == Normal then begin
-                            hs := self#f el;
-                            flag := true;
-                        end
-                        else if el#tag == Star then
+                    if BatSet.mem "ε" !alt_set then begin
+                        if el#tag == Normal then
                             hs := self#f el
-                        else if el#tag == Tok && el#token#tag == Term then
-                            hs := BatSet.add el#token#value !hs
-                        else if el#tag == Tok && el#token#tag == NonTerm then
+                        else if el#tag == Star then begin
+                            hs := self#f el;
+                            hs := BatSet.add "ε" !hs;
+                        end
+                        else if el#tag == Tok && el#token#tag == Term then begin
+                            hs := BatSet.empty;
+                            hs := BatSet.add el#token#value !hs;
+                        end
+                        else if el#tag == Tok && el#token#tag == NonTerm then begin
                             hs := BatHashtbl.find map_first el#token#value;
+
+                        end;
+                    alt_set := BatSet.remove "ε" !alt_set;
                     BatSet.iter (fun el -> alt_set := (BatSet.add el !alt_set)) !hs;
-                    flag := false;
                     end                   
                     )
-                )) lst;
+                )) lst;             
                 BatSet.iter (fun el -> set := BatSet.add el !set) !alt_set;
             ) rule#alternatives;
         !set
