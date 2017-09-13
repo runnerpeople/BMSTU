@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Application</string>
+    <string name="menu_update">Update</string>
+    <string name="change_language">Change Language</string>
+    <string name="choose_language">Choose language</string>
+    <string name="russian">Russian</string>
+    <string name="english">English</string>
+
+    <string-array name="magazine">
+        <item>abc-news-au</item>
+        <item>al-jazeera-english</item>
+        <item>ars-technica</item>
+        <item>associated-press</item>
+        <item>bbc-news</item>
+    </string-array>
+</resources>

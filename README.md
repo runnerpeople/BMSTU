@@ -28,7 +28,7 @@ Computer subjects, which I learn:
 - 7 semester:
   - Algorithms of bioinformatics
   - Numerical methods of linear algebra
-  - Data protection
+  - Mobile development
 - 8 semester:
   - Optimization methods
   - Modeling
