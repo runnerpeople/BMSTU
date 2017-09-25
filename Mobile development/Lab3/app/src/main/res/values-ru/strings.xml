@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Приложение</string>
+    <string name="menu_update">Обновить</string>
+    <string name="change_language">Поменять язык</string>
+    <string name="choose_language">Выберите язык</string>
+    <string name="russian">Русский</string>
+    <string name="english">Английский</string>
+</resources>

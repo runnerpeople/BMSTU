@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_bar_update"
+        android:title="@string/menu_update"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_bar_more"
+        android:icon="@drawable/ic_settings_black_24dp"
+        app:showAsAction="ifRoom"
+        android:title="">
+        <menu>
+            <item
+                android:id="@+id/action_bar_change_language"
+                app:showAsAction="ifRoom"
+                android:title="@string/change_language"/>
+        </menu>
+    </item>
+
+</menu>
