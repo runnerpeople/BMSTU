@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Lab7</string>
+    <string name="date">Date</string>
+    <string name="value">Value</string>
+    <string name="go">Go</string>
+    <string name="settings">Settings</string>
+    <string name="bitcoin">Bitcoin</string>
+    <string name="pref_period1">2016 year</string>
+    <string name="pref_period2">2017 year</string>
+    <string name="pref_period3">14 days</string>
+    <string name="pref_period_key" translatable="false">period</string>
+    <string name="pref_period_title">Choose period of time (year, days)</string>
+    <string name="pref_currency1">Rubles</string>
+    <string name="pref_currency2">USA Dollar (USD)</string>
+    <string name="pref_currency3">European euro (EUR)</string>
+    <string name="pref_currency_key" translatable="false">currency</string>
+    <string name="pref_currency_title">Choose currency</string>
+
+</resources>

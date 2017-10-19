@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Lab7</string>
+    <string name="date">Дата</string>
+    <string name="value">Значение</string>
+    <string name="go">Поехали</string>
+    <string name="settings">Настройки</string>
+    <string name="bitcoin">Биткоин</string>
+    <string name="pref_period1">2016 год</string>
+    <string name="pref_period2">2017 год</string>
+    <string name="pref_period3">14 дней</string>
+    <string name="pref_period_title">Выберите период времени (год, дни)</string>
+    <string name="pref_currency1">Рубли</string>
+    <string name="pref_currency2">Американские доллары</string>
+    <string name="pref_currency3">Европейские евро</string>
+    <string name="pref_currency_title">Выберите валюту</string>
+</resources>

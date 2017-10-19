@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:defaultValue="14"
+        android:entries="@array/pref_period_list_names"
+        android:entryValues="@array/pref_period_list_values"
+        android:key="@string/pref_period_key"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_period_title"/>
+
+
+    <MultiSelectListPreference
+        android:defaultValue="@array/pref_currency_default"
+        android:entries="@array/pref_currency_list_names"
+        android:entryValues="@array/pref_currency_list_values"
+        android:key="@string/pref_currency_key"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_currency_title"/>
+
+</PreferenceScreen>

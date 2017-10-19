@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="pref_period_list_names">
+        <item>@string/pref_period1</item>
+        <item>@string/pref_period2</item>
+        <item>@string/pref_period3</item>
+    </array>
+
+    <array name="pref_period_list_values">
+        <item>2016</item>
+        <item>2017</item>
+        <item>14</item>
+    </array>
+
+
+    <array name="pref_currency_list_names">
+        <item>@string/pref_currency1</item>
+        <item>@string/pref_currency2</item>
+        <item>@string/pref_currency3</item>
+    </array>
+
+    <array name="pref_currency_list_values">
+        <item>rub</item>
+        <item>usd</item>
+        <item>eur</item>
+    </array>
+
+    <array name="pref_currency_default">
+        <item>rub</item>
+    </array>
+    
+</resources>
