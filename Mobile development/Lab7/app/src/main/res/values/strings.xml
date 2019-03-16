@@ -1,19 +1,42 @@
 <resources>
     <string name="app_name">Lab7</string>
+
+
     <string name="date">Date</string>
     <string name="value">Value</string>
-    <string name="go">Go</string>
+    <string name="update">Update</string>
     <string name="settings">Settings</string>
-    <string name="bitcoin">Bitcoin</string>
-    <string name="pref_period1">2016 year</string>
-    <string name="pref_period2">2017 year</string>
-    <string name="pref_period3">14 days</string>
+    <string name="bitcoin">name of bitcoin</string>
     <string name="pref_period_key" translatable="false">period</string>
-    <string name="pref_period_title">Choose period of time (year, days)</string>
-    <string name="pref_currency1">Rubles</string>
+    <string name="pref_period_title">Choose period of time (days)</string>
+    <string name="pref_currency1">Rubles (RUB)</string>
     <string name="pref_currency2">USA Dollar (USD)</string>
     <string name="pref_currency3">European euro (EUR)</string>
     <string name="pref_currency_key" translatable="false">currency</string>
     <string name="pref_currency_title">Choose currency</string>
+    <string name="accept">Yes!</string>
+    <string name="last_updated">Update</string>
+
+
+    <string-array name="pref_currency_list_names">
+        <item>@string/pref_currency1</item>
+        <item>@string/pref_currency2</item>
+        <item>@string/pref_currency3</item>
+    </string-array>
+
+    <string-array name="pref_currency_list_values">
+        <item>RUB</item>
+        <item>USD</item>
+        <item>EUR</item>
+    </string-array>
+
+
+    <string name="day">day</string>
+    <string name="days">days</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="rub" translatable="false">\\u20BD</string>
+    <string name="usd" translatable="false">\\u0024</string>
+    <string name="eur" translatable="false">\\u20AC</string>
 
 </resources>

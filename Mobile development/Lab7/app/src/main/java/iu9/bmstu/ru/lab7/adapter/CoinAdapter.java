@@ -1,28 +1,26 @@
 package iu9.bmstu.ru.lab7.adapter;
 
-import android.graphics.Typeface;
-import android.icu.text.SimpleDateFormat;
-import android.icu.util.Currency;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import iu9.bmstu.ru.lab7.R;
-import iu9.bmstu.ru.lab7.activity.MainActivity;
+import iu9.bmstu.ru.lab7.activity.InfoActivity;
 import iu9.bmstu.ru.lab7.model.Coin;
 
 public class CoinAdapter extends RecyclerView.Adapter<CoinAdapter.CoinHolder> {
 
     private List<Coin> data;
-    public static Typeface font;
 
     public CoinAdapter(List<Coin> data) {
         this.data = data;
@@ -46,9 +44,6 @@ public class CoinAdapter extends RecyclerView.Adapter<CoinAdapter.CoinHolder> {
 
             dateTextView = (TextView)itemView.findViewById(R.id.dateTextView);
             valueTextView = (TextView)itemView.findViewById(R.id.valueTextView);
-
-            dateTextView.setTypeface(font);
-            valueTextView.setTypeface(font);
         }
     }
 
@@ -59,14 +54,36 @@ public class CoinAdapter extends RecyclerView.Adapter<CoinAdapter.CoinHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final CoinAdapter.CoinHolder holder, int position) {
-        Date date = data.get(position).getDate();
-        Double value = data.get(position).getValue();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm");
-        NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
-        numberFormat.setCurrency(Coin.getValue_symbol());
-        holder.dateTextView.setText(dateFormat.format(date));
-        holder.valueTextView.setText(numberFormat.format(value));
+    public void onBindViewHolder(final CoinAdapter.CoinHolder holder, final int position) {
+        Locale locale = Locale.getDefault();
+        if (Coin.getCurrency().equals("RUB"))
+            locale = new Locale("ru","RU");
+        else if (Coin.getCurrency().equals("EUR"))
+            locale = Locale.FRANCE;
+        else if (Coin.getCurrency().equals("USD"))
+            locale = Locale.US;
+
+        Date time = data.get(position).getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm", locale);
+        int index = 0;
+        String valueResultStr = "";
+
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(locale);
+
+        holder.dateTextView.setText(dateFormat.format(time));
+        holder.valueTextView.setText(numberFormat.format(data.get(position).getLow()));
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent(v.getContext(), InfoActivity.class);
+                intent.putExtra("open", data.get(position).getOpen());
+                intent.putExtra("close", data.get(position).getClose());
+                intent.putExtra("date", data.get(position).getTime().getTime());
+                v.getContext().startActivity(intent);
+                return true;
+            }
+        });
     }
 
     @Override

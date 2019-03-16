@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Lab8</string>
+    <string name="button_open_filemanager">Файловый менеджер</string>
+    <string name="input_file_name">Создать</string>
+
+    <string name="sd_card">SD карта</string>
+    <string name="internal">Внутренняя память</string>
+    <string name="app">Папка приложения</string>
+
+    <string name="folder">Папка</string>
+    <string name="file">Файл</string>
+</resources>

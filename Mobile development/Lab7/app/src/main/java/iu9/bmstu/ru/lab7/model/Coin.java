@@ -1,61 +1,84 @@
 package iu9.bmstu.ru.lab7.model;
 
 import java.util.Date;
-import java.util.Locale;
-import java.util.Currency;
 
 public class Coin {
 
-    private static Currency value_symbol;
-    private static Locale locale;
+    private static String currency;
 
-    private Date date;
-    private Double value;
+    private Date time;
+
+    private double close;
+    private double open;
+    private double low;
+    private double high;
 
     public Coin() {}
 
-    public Coin(Date date, double value) {
-        this.date = date;
-        this.value = value;
+    public Coin(Date time, double close, double open, double low, double high) {
+        this.time = time;
+        this.close = close;
+        this.open = open;
+        this.low = low;
+        this.high = high;
     }
 
-    public Date getDate() {
-        return date;
+    public static String getCurrency() {
+        return currency;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public static void setCurrency(String currency) {
+        Coin.currency = currency;
     }
 
-    public static Currency getValue_symbol() {
-        return value_symbol;
+    public Date getTime() {
+        return time;
     }
 
-    public static void setValue_symbol(Currency value_symbol) {
-        Coin.value_symbol = value_symbol;
+    public void setTime(Date time) {
+        this.time = time;
     }
 
-    public static Locale getLocale() {
-        return locale;
+    public double getClose() {
+        return close;
     }
 
-    public static void setLocale(Locale locale) {
-        Coin.locale = locale;
+    public void setClose(double close) {
+        this.close = close;
     }
 
-    public Double getValue() {
-        return value;
+    public double getOpen() {
+        return open;
     }
 
-    public void setValue(Double value) {
-        this.value = value;
+    public void setOpen(double open) {
+        this.open = open;
+    }
+
+    public double getLow() {
+        return low;
+    }
+
+    public void setLow(double low) {
+        this.low = low;
+    }
+
+    public double getHigh() {
+        return high;
+    }
+
+    public void setHigh(double high) {
+        this.high = high;
     }
 
     @Override
     public String toString() {
         return "Coin{" +
-                "date=" + date +
-                ", value=" + value +
+                "time=" + time +
+                ", close=" + close +
+                ", open=" + open +
+                ", low=" + low +
+                ", high=" + high +
                 '}';
     }
 }

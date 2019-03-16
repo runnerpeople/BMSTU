@@ -27,6 +27,15 @@
                 android:value="iu9.bmstu.ru.lab7.activity.MainActivity"/>
         </activity>
 
+
+        <activity
+            android:name=".activity.InfoActivity"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="iu9.bmstu.ru.lab7.activity.MainActivity"/>
+        </activity>
+
     </application>
 
 </manifest>

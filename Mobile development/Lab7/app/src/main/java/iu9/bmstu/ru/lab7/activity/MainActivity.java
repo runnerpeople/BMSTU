@@ -1,13 +1,16 @@
 package iu9.bmstu.ru.lab7.activity;
 
 import android.content.Intent;
-import android.graphics.Typeface;
-import android.icu.text.SimpleDateFormat;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -28,37 +32,48 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
-import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Currency;
-import java.util.Iterator;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.UUID;
 
 import iu9.bmstu.ru.lab7.R;
 import iu9.bmstu.ru.lab7.adapter.CoinAdapter;
 import iu9.bmstu.ru.lab7.model.Coin;
-import iu9.bmstu.ru.lab7.util.URLUtil;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<JSONObject> {
 
     private static final Integer LOADER_ID = UUID.randomUUID().hashCode();
     private static final String TAG = MainActivity.class.getName();
 
+    private LinearLayout layout;
     private EditText editTextBitcoin;
-    private RecyclerView recyclerViewBitcoin;
     private ProgressBar progressBar;
     private CoinAdapter coinAdapter;
 
     private Bundle params;
     private List<Coin> coins = new ArrayList<>();
 
+    private Uri makeUri(String nameBitcoin, String currency, int days) {
+        return Uri.parse("https://min-api.cryptocompare.com/data/histoday").buildUpon()
+                .appendQueryParameter("fsym", nameBitcoin)
+                .appendQueryParameter("tsym", currency)
+                .appendQueryParameter("aggregate",String.valueOf(days))
+                .build();
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG,"onOptionsItemSelected()");
         switch (item.getItemId()) {
             case R.id.action_bar_update: {
                 initLoader(editTextBitcoin.getText().toString());
@@ -73,8 +88,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private void initLoader(String bitcoin) {
+        Log.d(TAG,"onInitLoader()");
         params = new Bundle();
-        params.putString("URL",URLUtil.makeUri(bitcoin,14).toString());
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int days = sharedPreferences.getInt(getString(R.string.pref_period_key),1);
+        String currency = sharedPreferences.getString(getString(R.string.pref_currency_key), null);
+
+        if (currency == null) {
+            Snackbar.make(layout,"Не указано значение валюты",Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        params.putString("URL",makeUri(bitcoin,currency,days).toString());
+
+        String url = params.getString("URL");
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
 
         LoaderManager loaderManager = getSupportLoaderManager();
         Loader<JSONObject> loader = loaderManager.getLoader(LOADER_ID);
@@ -91,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<JSONObject> onCreateLoader(int id, final Bundle args) {
-
+        Log.d(TAG,"onCreateLoader()");
         return new AsyncTaskLoader<JSONObject>(this) {
 
             @Override
@@ -127,60 +157,49 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<JSONObject> loader, JSONObject data) {
+        Log.d(TAG,"onLoadFinished()");
         progressBar.setVisibility(View.GONE);
 
-        SimpleDateFormat dateFormat;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         try {
             JSONObject coinsObj;
             JSONArray coinsArr;
             String URL = params.getString("URL");
-            dateFormat = new SimpleDateFormat("dd-MM-yyyy");
             if (data == null) {
-                Toast.makeText(getApplicationContext(), "Null data", Toast.LENGTH_LONG).show();
+                Snackbar.make(layout, "Нет данных", Toast.LENGTH_LONG).show();
                 return;
             }
-
-            if (!URL.contains("days")) {
-                coinsArr = data.getJSONArray("history");
-                Locale locale = new Locale("ru");
-                Coin.setLocale(locale);
-                Coin.setValue_symbol(Currency.getInstance("rub"));
+            coins = new ArrayList<>();
+            if (URL != null) {
+                coinsArr = data.getJSONArray("Data");
                 for (int i = 0; i < coinsArr.length(); i++) {
                     JSONObject coinsInfo = (JSONObject) coinsArr.get(i);
                     Coin coin = new Coin();
-                    coin.setValue(coinsInfo.getJSONObject("price").getDouble("rub"));
-                    coin.setDate(dateFormat.parse(coinsInfo.getString("date")));
+                    coin.setTime(new Date(coinsInfo.getLong("time") * 1000));
+
+                    coin.setLow(coinsInfo.getDouble("low"));
+                    coin.setHigh(coinsInfo.getDouble("high"));
+                    coin.setOpen(coinsInfo.getDouble("open"));
+                    coin.setClose(coinsInfo.getDouble("close"));
+
                     coins.add(coin);
                 }
             }
-            else {
-                coinsObj = data.getJSONObject("history");
-                Locale locale = new Locale("ru");
-                Coin.setLocale(locale);
-                Coin.setValue_symbol(Currency.getInstance("rub"));
-                dateFormat = new SimpleDateFormat("HH-dd-MM-yyyy");
-                Iterator<?> keys = coinsObj.keys();
-                while (keys.hasNext()) {
-                    String key = (String)keys.next();
-                    if (coinsObj.get(key) instanceof JSONObject) {
-                        JSONObject coinsInfo = (JSONObject)coinsObj.get(key);
-                        Coin coin = new Coin();
-                        coin.setValue(coinsInfo.getJSONObject("price").getDouble("rub"));
-                        coin.setDate(dateFormat.parse(key));
-                        coins.add(coin);
-                    }
-                }
-            }
-            coinAdapter.setData(coins);
-            coinAdapter.notifyDataSetChanged();
         }
-        catch (JSONException | ParseException ex) {
+        catch (JSONException ex) {
             Log.e(TAG,ex.getMessage());
         }
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String currency = sharedPreferences.getString(getString(R.string.pref_currency_key), null);
+        Coin.setCurrency(currency);
+
+        coinAdapter.setData(coins);
+        coinAdapter.notifyDataSetChanged();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d(TAG,"onCreateOptionsMenu()");
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
@@ -189,28 +208,29 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoaderReset(Loader<JSONObject> loader) {
+        Log.d(TAG,"onLoaderReset()");
         // TODO: Not implemented
     }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG,"onCreate()");
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
 
-        CoinAdapter.font = Typeface.createFromAsset(getAssets(),"Roboto-ThinItalic.ttf");
-
-        editTextBitcoin = (EditText) findViewById(R.id.bitcoinEditText);
-        recyclerViewBitcoin = (RecyclerView) findViewById(R.id.bitcoinRecyclerView);
-        progressBar = (ProgressBar) findViewById(R.id.bitcoinProgressBar);
+        layout = findViewById(R.id.main_activity);
+        editTextBitcoin = findViewById(R.id.bitcoinEditText);
+        RecyclerView recyclerViewBitcoin = findViewById(R.id.bitcoinRecyclerView);
+        progressBar = findViewById(R.id.bitcoinProgressBar);
 
         progressBar.setVisibility(View.GONE);
 
         coinAdapter = new CoinAdapter(coins);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerViewBitcoin.setLayoutManager(linearLayoutManager);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
+        recyclerViewBitcoin.setLayoutManager(gridLayoutManager);
         recyclerViewBitcoin.setAdapter(coinAdapter);
 
     }

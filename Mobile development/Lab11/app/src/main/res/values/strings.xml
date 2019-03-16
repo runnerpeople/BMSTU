@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Lab 11</string>
+    <string name="send_broadcast">Отправить сообщение</string>
+    <string name="notification_id_channel">my_notification</string>
+</resources>

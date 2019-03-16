@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Lab7</string>
+    <string name="add_value">Добавить встречу</string>
+    <string name="edit_label">Название</string>
+    <string name="edit_label2">Место</string>
+    <string name="edit_label3">Время</string>
+    <string name="edit_cost">Cost</string>
+    <string name="ok_value">Добавить</string>
+    <string name="title_alert_dialog">Новая встреча</string>
+    <string name="title_update_alert_dialog">Изменить встречу</string>
+</resources>

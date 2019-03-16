@@ -3,15 +3,33 @@
     <string name="app_name">Lab7</string>
     <string name="date">Дата</string>
     <string name="value">Значение</string>
-    <string name="go">Поехали</string>
+    <string name="update">Обновить</string>
     <string name="settings">Настройки</string>
-    <string name="bitcoin">Биткоин</string>
-    <string name="pref_period1">2016 год</string>
-    <string name="pref_period2">2017 год</string>
-    <string name="pref_period3">14 дней</string>
-    <string name="pref_period_title">Выберите период времени (год, дни)</string>
+    <string name="bitcoin">Название биткоина</string>
+    <string name="pref_period_title">Выберите период времени (дни)</string>
     <string name="pref_currency1">Рубли</string>
     <string name="pref_currency2">Американские доллары</string>
     <string name="pref_currency3">Европейские евро</string>
     <string name="pref_currency_title">Выберите валюту</string>
+    <string name="accept">Да!</string>
+    <string name="last_updated">Обновлено</string>
+
+
+
+    <string-array name="pref_currency_list_names">
+        <item>@string/pref_currency1</item>
+        <item>@string/pref_currency2</item>
+        <item>@string/pref_currency3</item>
+    </string-array>
+
+    <string-array name="pref_currency_list_values">
+        <item>rub</item>
+        <item>usd</item>
+        <item>eur</item>
+    </string-array>
+
+    <string name="day">дня</string>
+    <string name="days">дней</string>
+    <string name="open">Открыто</string>
+    <string name="close">Закрыто</string>
 </resources>
