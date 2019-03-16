@@ -1,6 +1,9 @@
 #!/python
 # -*- coding: utf-8 -*-
 
+from bio.format import *
+import sys
+
 def insertToStr(str,pos):
     return str[:pos] + "-" + str[pos:]
 
@@ -62,7 +65,6 @@ def setSkip(a,b,answer):
             a_index -= 1
         elif a[a_index] != answer[i] and b[b_index] != answer[i]:
             a_count = 0
-            a_count_s = 0
             b_count = 0
 
             while a[a_index] != answer[i]:
@@ -86,10 +88,7 @@ def setSkip(a,b,answer):
             b_index -= 1
             a_index -= 1
 
-    #
-
     a_count = 0
-    a_count_s = 0
     b_count = 0
 
     while a_index >= 0:
@@ -110,38 +109,30 @@ def setSkip(a,b,answer):
 
     return a,b
 
+def align(filename):
 
-# For debug
-# def print_matr(result,i_max,j_max,min_str,max_str):
-#     for i in range(i_max):
-#         for j in range(j_max):
-#             if i==0 and j==0:
-#                 print('/',end=' ')
-#             elif i==0:
-#                 print(max_str[j-1],end=' ')
-#             elif j==0:
-#                 print(min_str[i-1],end=' ')
-#             else:
-#                 print(result[i][j],end=' ')
-#         print()
-# print_matr(result,min_index,max_index,min_str,max_str)
+    seq = read_file(filename)
 
+    a = seq[0].seq
+    b = seq[1].seq
 
-a = input()
-b = input()
+    max_str = a if len(a) > len(b) else b
+    min_str = b if len(a) > len(b) else a
 
-max_str = a if len(a) > len(b) else b
-min_str = b if len(a) > len(b) else a
+    max_index = len(max_str) + 1
+    min_index = len(min_str) + 1
 
-max_index = len(max_str)+1
-min_index = len(min_str)+1
+    result = [[0 for x in range(max_index)] for y in range(min_index)]
+    countMax(max_str, min_str, result, max_index, min_index)
 
-result = [[0 for x in range(max_index)] for y in range(min_index)]
-countMax(max_str,min_str,result,max_index,min_index)
+    answer = maxSeq(result,min_index,max_index,min_str)
+    a,b = setSkip(a,b,answer)
 
-answer = maxSeq(result,min_index,max_index,min_str)
-a,b = setSkip(a,b,answer)
+    output([a,b])
 
-print(a)
-print("|" * len(a))
-print(b)
+if __name__ == "__main__":
+    if len(sys.argv) == 2:
+        align(sys.argv[1])
+    else:
+        sys.stderr.write('Usage: python lab0.py file_name.fasta')
+        sys.exit(1)
