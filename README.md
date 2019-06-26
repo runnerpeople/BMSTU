@@ -19,6 +19,7 @@ Computer subjects, which I learn:
   - Operating Systems (ReactOS, NetBSD)
 - 5 semester:
   - Relational databases
+  - Theory of formal languages
   - Development of parallel and distributed programs
 - 6 semester:
   - Numerical methods
